@@ -17,6 +17,7 @@ The platform should:
 - Use MCP for tool, context, and workflow integrations.
 - Support configurable personas such as engineering, operations, security, documentation, and change-management agents.
 - Package procedural knowledge as versioned skills with validation criteria.
+- Provide governed episodic memory so agents can recall prior investigations, decisions, incidents, approvals, and user/team preferences with traceable provenance.
 - Build and maintain a network knowledge graph from documentation, source-of-truth systems, telemetry, configs, and tickets.
 - Ingest documentation from systems such as Confluence, SharePoint, Git repositories, Google Drive, ServiceNow, and internal portals.
 - Enforce enterprise controls by default: least privilege, approval gates, audit logs, secrets isolation, signed tools, policy-as-code, and network egress control.
@@ -39,7 +40,10 @@ The platform should:
 5. Network operations require evidence.
    The agent should show command output, topology evidence, config diffs, validation results, and rollback options before action.
 
-6. The lab must look like an enterprise.
+6. Memory is a governed system, not hidden prompt state.
+   Episodic memory should be scoped, inspectable, redactable, policy-controlled, and tied to evidence.
+
+7. The lab must look like an enterprise.
    The home lab should include identity, secrets, policy, observability, source-of-truth, graph storage, document ingestion, GitOps, and isolated tool execution.
 
 ## High-Level Architecture
@@ -60,6 +64,7 @@ flowchart TB
         docs[Documentation Agent]
         change[Change Agent]
         graphAgent[Graph Steward Agent]
+        memoryAgent[Memory Steward Agent]
     end
 
     subgraph runtime[Isolated Agent Runtime]
@@ -80,6 +85,7 @@ flowchart TB
 
     subgraph data[Knowledge and Evidence Stores]
         kg[Network Knowledge Graph]
+        episodic[Episodic Memory Store]
         vector[Vector Index]
         object[Raw Document and Evidence Store]
         events[Event and Audit Store]
@@ -173,6 +179,15 @@ approvals:
     - network.device.write
     - git.merge
     - change.execute
+memory:
+  episodic: enabled
+  scopes:
+    - tenant
+    - persona
+    - case
+    - user
+  write_policy: policy_approved
+  retention: 180d
 ```
 
 Initial personas:
@@ -183,6 +198,7 @@ Initial personas:
 - Documentation Agent: ingests docs, reconciles stale pages, cites sources, and proposes documentation updates.
 - Change Agent: builds change records, validates required evidence, tracks approvals, and coordinates execution windows.
 - Graph Steward Agent: maintains entity resolution, graph quality, stale edges, and source attribution.
+- Memory Steward Agent: maintains episodic recall quality, retention, redaction, deduplication, and source attribution.
 - Lab Agent: manages OKD, Proxmox, Containerlab, test devices, mock controllers, and validation fixtures.
 
 ## Skills for Procedural Knowledge
@@ -223,6 +239,57 @@ flowchart TB
     policy --> openshell[OpenShell Policy]
 ```
 
+## Episodic Memory
+
+Episodic memory is a first-class platform requirement. It captures what happened during prior agent work so future agents can use relevant operational experience without relying only on static documentation or vector search.
+
+The platform should remember:
+
+- Prior investigations, hypotheses, dead ends, and final conclusions.
+- Incident timelines, symptoms, affected services, commands run, and evidence gathered.
+- Change plans, approvals, execution results, rollback notes, and post-change validation.
+- User and team preferences that affect workflow, such as required evidence, escalation paths, and preferred validation surfaces.
+- Lab experiments, MCP tool behavior, parser outcomes, failed tests, and successful remediation patterns.
+- Agent collaboration traces, including which persona contributed what decision or evidence.
+
+Memory must be governed:
+
+- Memory writes go through a memory service or MCP tool, not direct agent-local files.
+- Each memory has tenant, user, persona, case, source, sensitivity, retention, and provenance metadata.
+- Sensitive memories support redaction, expiration, legal hold, and deletion workflows.
+- Agents can propose memories, but policy decides whether they are stored automatically, queued for review, or rejected.
+- Memory recall must cite the memory record and its source evidence.
+- Memory access is filtered by identity, role, tenant, persona, and case context.
+- Memory stores must be auditable and replayable for incident review and model evaluation.
+
+```mermaid
+flowchart TB
+    event[Agent Work Event]
+    evidence[Evidence Bundle]
+    proposal[Memory Proposal]
+    policy[Memory Policy Check]
+    review[Optional Human Review]
+    store[Episodic Memory Store]
+    recall[Scoped Memory Recall]
+    agent[Agent Context]
+    audit[Audit Log]
+
+    event --> evidence
+    evidence --> proposal
+    proposal --> policy
+    policy --> review
+    policy --> store
+    review --> store
+    store --> recall
+    recall --> agent
+    proposal --> audit
+    policy --> audit
+    review --> audit
+    recall --> audit
+```
+
+Episodic memory is separate from the knowledge graph, but they should reinforce each other. The knowledge graph represents durable network facts and relationships. Episodic memory represents time-bound experience: what was tried, who approved it, why a path was rejected, what evidence existed at the time, and what the agent should remember next time.
+
 ## MCP Tool Plane
 
 MCP servers should be small, composable, and policy-aware. Agents should not know vendor credentials or direct API details. The MCP broker handles auth, policy checks, tool discovery, request logging, and result shaping.
@@ -233,6 +300,7 @@ Initial MCP tool domains:
 - Network config: Git, Ansible, NAPALM, pyATS, Scrapli, Nornir.
 - Telemetry and logs: Prometheus, Grafana, Elastic, Loki, OpenTelemetry.
 - Topology and graph: Neo4j, RDF stores, topology snapshots, dependency maps.
+- Episodic memory: investigation history, incident memory, change memory, lab experiment recall, and persona-scoped preferences.
 - Documentation: Confluence, SharePoint, Git, Markdown, PDFs, diagrams, Google Drive.
 - Change and ticketing: ServiceNow, Jira, GitHub Issues, Linear.
 - Lab control: OKD, Kubernetes, Proxmox, Containerlab, Batfish, virtual devices.
@@ -336,6 +404,7 @@ Required controls:
 - Runtime isolation: OpenShell sandbox policies for filesystem, process, and network access.
 - Tool isolation: MCP servers run separately from agent sandboxes.
 - Secret isolation: agents request capabilities, not raw secrets.
+- Memory isolation: episodic recall is scoped by tenant, role, user, persona, case, sensitivity, and retention policy.
 - Policy-as-code: every tool call and agent action is evaluated before execution.
 - Human approval: high-risk actions require explainable plans and approval records.
 - Auditability: immutable logs for prompts, plans, tool calls, policy decisions, and evidence.
@@ -462,6 +531,11 @@ Proposed future structure:
 │   ├── schema/
 │   ├── migrations/
 │   └── quality-rules/
+├── memory/
+│   ├── schema/
+│   ├── retention/
+│   ├── redaction/
+│   └── evaluators/
 ├── lab/
 │   ├── okd/
 │   ├── proxmox/
@@ -480,6 +554,7 @@ Proposed future structure:
 - Define platform threat model.
 - Define persona schema.
 - Define skill package format.
+- Define episodic memory schema, retention model, recall policy, and review workflow.
 - Define MCP broker requirements.
 - Define A2A discovery and routing requirements.
 - Define graph schema v0.
@@ -492,6 +567,7 @@ Proposed future structure:
 - Implement MCP tools for docs search, source-of-truth lookup, Git read, and graph query.
 - Build first documentation ingestion connector for Git and local Markdown.
 - Build graph schema for devices, interfaces, prefixes, sites, owners, and documents.
+- Implement read-only episodic memory recall for prior investigations and lab experiments.
 - Produce cited answers with evidence bundles.
 
 ### Phase 2: Lab Automation and Validation
@@ -500,6 +576,7 @@ Proposed future structure:
 - Add config collection and parsing MCP tool.
 - Add Batfish or equivalent validation path.
 - Add skills for BGP troubleshooting and config diff review.
+- Add governed memory writes for lab runs, failed validations, and successful remediation patterns.
 - Add policy tests that prove agents cannot access blocked files, networks, or tools.
 
 ### Phase 3: Controlled Change Proposals
@@ -509,12 +586,14 @@ Proposed future structure:
 - Add human approval workflow.
 - Add change-risk scoring.
 - Add immutable audit records.
+- Add change memory records for plan, approval, execution, validation, and rollback evidence.
 
 ### Phase 4: Enterprise Pilot Readiness
 
 - Add OIDC/SAML integration.
 - Add signed skill and tool packages.
 - Add tenant isolation.
+- Add memory redaction, expiration, export, and legal-hold workflows.
 - Add complete observability dashboards.
 - Add SOC2-style evidence collection.
 - Add deployment guides for OKD/Kubernetes and isolated GPU hosts.
@@ -527,6 +606,7 @@ Proposed future structure:
 - What source-of-truth system should anchor the first lab: Nautobot, NetBox, Infrahub, or a small built-in fixture?
 - What is the first high-value skill: BGP troubleshooting, config diff review, incident triage, or documentation reconciliation?
 - Which documentation connector should come first after Git and local files: Confluence or SharePoint?
+- Should episodic memory start as PostgreSQL tables, a graph-adjacent store, or a dedicated event-sourced memory service?
 
 ## References
 
