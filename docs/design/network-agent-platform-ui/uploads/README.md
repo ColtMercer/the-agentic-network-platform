@@ -87,16 +87,6 @@ Repository governance files:
 - [Design issue form](.github/ISSUE_TEMPLATE/design.yml)
 - [Pull request template](.github/pull_request_template.md)
 
-## Web UI
-
-The production web app lives in [apps/web](apps/web/README.md).
-
-The imported UI design reference lives in [docs/design/network-agent-platform-ui](docs/design/network-agent-platform-ui/README.md).
-
-Deployment decision: the UI should run as a dedicated service, not inside an NVIDIA OpenShell agent sandbox. OpenShell is the isolated agent runtime; the UI is the human-facing control plane that calls Platform APIs with delegated identity.
-
-See [Web UI Deployment Architecture](docs/architecture/web-ui-deployment.md).
-
 ## High-Level Architecture
 
 ```mermaid
@@ -794,12 +784,9 @@ Proposed future structure:
 ```text
 .
 ├── README.md
-├── apps/
-│   └── web/
 ├── docs/
 │   ├── architecture/
 │   ├── adr/
-│   ├── design/
 │   ├── governance/
 │   ├── security/
 │   └── lab/

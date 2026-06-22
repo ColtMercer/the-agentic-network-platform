@@ -1,0 +1,16 @@
+{
+  "name": "the-agentic-network-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Open source monorepo for secure network AI agents and MCP servers.",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "web:dev": "npm --workspace @agentic-network-platform/web run dev",
+    "web:build": "npm --workspace @agentic-network-platform/web run build",
+    "web:lint": "npm --workspace @agentic-network-platform/web run lint",
+    "web:preview": "npm --workspace @agentic-network-platform/web run preview",
+    "web:typecheck": "npm --workspace @agentic-network-platform/web run typecheck"
+  }
+}
