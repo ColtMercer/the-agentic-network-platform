@@ -23,6 +23,7 @@ The platform should:
 - Ingest documentation from systems such as Confluence, SharePoint, Git repositories, Google Drive, ServiceNow, and internal portals.
 - Provide a first-class integration model for first-party and third-party MCP servers, including registration, capability discovery, policy binding, observability, and lifecycle management.
 - Enforce delegated identity so chat, CLI, and API actions run on behalf of the user and cannot grant users elevated privileges merely because an agent or MCP server has broader service permissions.
+- Develop through public issues and pull requests so every code change has a visible trail from request to review to merge.
 - Enforce enterprise controls by default: least privilege, approval gates, audit logs, secrets isolation, signed tools, policy-as-code, and network egress control.
 - Treat network changes as plans that must be validated, explained, approved, executed, and audited.
 
@@ -54,6 +55,37 @@ The platform should:
 
 9. The lab must look like an enterprise.
    The home lab should include identity, secrets, policy, observability, source-of-truth, graph storage, document ingestion, GitOps, and isolated tool execution.
+
+10. Trust comes from process evidence.
+    Every code change should be tied to an issue, pull request, review, checks, and audit trail, even when one AI-assisted implementer writes most of the code.
+
+## Open Source Trust Workflow
+
+The project uses an issue-driven development model documented in [Issue-Driven Development Workflow](docs/governance/issue-driven-development.md).
+
+Once the repository is published, code changes should follow:
+
+```text
+maintainer prompt -> issue -> branch -> pull request -> checks -> human review -> merge -> issue closed
+```
+
+This supports a single-writer, public-review model:
+
+- The maintainer can prompt the AI agent to draft issues.
+- The AI agent can implement the issue on a branch and open a PR.
+- The PR links back to the issue with `Closes #123`, `Fixes #123`, or `Resolves #123`.
+- Automated checks provide objective validation.
+- A human maintainer approves before merge.
+- The merged PR closes the issue and leaves a public trail.
+
+Repository governance files:
+
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [Issue-driven workflow](docs/governance/issue-driven-development.md)
+- [Feature issue form](.github/ISSUE_TEMPLATE/feature.yml)
+- [Bug issue form](.github/ISSUE_TEMPLATE/bug.yml)
+- [Design issue form](.github/ISSUE_TEMPLATE/design.yml)
+- [Pull request template](.github/pull_request_template.md)
 
 ## High-Level Architecture
 
@@ -755,6 +787,7 @@ Proposed future structure:
 ├── docs/
 │   ├── architecture/
 │   ├── adr/
+│   ├── governance/
 │   ├── security/
 │   └── lab/
 ├── projects/
@@ -812,6 +845,7 @@ Proposed future structure:
 
 - Define platform threat model.
 - Define monorepo project standards for standalone and integrated MCP servers.
+- Define issue-driven development, PR review, and merge governance.
 - Define persona schema.
 - Define skill package format.
 - Define episodic memory schema, retention model, recall policy, and review workflow.
@@ -828,6 +862,7 @@ Proposed future structure:
 - Implement A2A task routing between coordinator, engineering, and docs agents.
 - Implement MCP tools for docs search, source-of-truth lookup, Git read, graph query, and read-only Nornir collection.
 - Implement `nornir-mcp` standalone mode with inventory query, driver explanation, and read-only command execution.
+- Publish initial roadmap issues for platform, `nornir-mcp`, identity, governance, and memory work.
 - Build first documentation ingestion connector for Git and local Markdown.
 - Build graph schema for devices, interfaces, prefixes, sites, owners, and documents.
 - Implement read-only episodic memory recall for prior investigations and lab experiments.
@@ -860,6 +895,7 @@ Proposed future structure:
 - Add signed skill and tool packages.
 - Add tenant isolation.
 - Add memory redaction, expiration, export, and legal-hold workflows.
+- Enforce branch protection, required PR reviews, and required status checks for `main`.
 - Add complete observability dashboards.
 - Add SOC2-style evidence collection.
 - Add deployment guides for OKD/Kubernetes and isolated GPU hosts.

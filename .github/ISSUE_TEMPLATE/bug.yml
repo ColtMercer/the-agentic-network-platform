@@ -1,0 +1,65 @@
+name: Bug report
+description: Report broken behavior or a regression.
+title: "[Bug]: "
+labels:
+  - "needs-triage"
+  - "type: bug"
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is broken?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Provide exact steps, commands, inputs, or fixtures.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: project
+    attributes:
+      label: Project
+      options:
+        - platform
+        - nornir-mcp
+        - document-ingestion-mcp
+        - knowledge-graph-mcp
+        - episodic-memory-mcp
+        - change-management-mcp
+        - governance
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Include logs, screenshots, command output, trace IDs, request IDs, or failing test names.
+    validations:
+      required: false
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: Who is affected and how severe is it?
+    validations:
+      required: true

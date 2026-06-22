@@ -1,0 +1,45 @@
+name: Design proposal
+description: Propose an architectural, security, governance, or protocol design.
+title: "[Design]: "
+labels:
+  - "needs-triage"
+  - "type: design"
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What decision or design area does this cover?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the proposed design.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What alternatives should reviewers know about?
+    validations:
+      required: false
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and tradeoffs
+      description: Include security, identity, operational, and maintenance risks.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What makes this design accepted or ready for implementation?
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
