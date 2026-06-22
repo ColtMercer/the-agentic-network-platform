@@ -115,7 +115,11 @@ function App() {
         </div>
       </aside>
 
-      <section className="workspace">
+      <section
+        className={`workspace ${
+          view === 'console' ? 'workspace-dark' : 'workspace-light'
+        }`}
+      >
         <TopBar
           activeServerCount={activeServerCount}
           view={view}
