@@ -97,6 +97,12 @@ Deployment decision: the UI should run as a dedicated service, not inside an NVI
 
 See [Web UI Deployment Architecture](docs/architecture/web-ui-deployment.md).
 
+## Agent Runtime Design
+
+The first capability-focused runtime design is captured in [OpenShell Nornir Agent Runtime Architecture](docs/architecture/openshell-nornir-agent-runtime.md).
+
+It defines the secure OpenShell sandbox model, governed terminal access, Nornir-first execution environment, custom script controls, settings database inheritance, Git-backed configuration flow, and the initial capability phases for collection and automation planning.
+
 ## High-Level Architecture
 
 ```mermaid
