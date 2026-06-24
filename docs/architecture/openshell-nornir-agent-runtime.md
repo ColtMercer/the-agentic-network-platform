@@ -22,6 +22,56 @@ References:
 - NVIDIA OpenShell runtime model: https://docs.nvidia.com/openshell/about/how-it-works
 - Existing UI deployment decision: [Web UI Deployment Architecture](web-ui-deployment.md)
 
+## OpenShell and Gateway Primer
+
+OpenShell is the runtime boundary for the agent environment. It is not just a container image. The important mental model is a split between a control plane and a sandbox data plane:
+
+- The CLI, SDK, or TUI is the user-facing OpenShell access path.
+- The Gateway is the authenticated control plane. It owns API access, durable state, sandbox lifecycle, policy and settings delivery, provider records, inference routing, authorization decisions, and relay coordination.
+- The Supervisor runs inside every sandbox. It is the local enforcement layer that starts the agent as a restricted child process and applies filesystem, process, network, credential, inference, logging, exec, file-transfer, and relay controls.
+- Compute, credentials, identity, workload identity, secret stores, image pipelines, and GPU exposure stay behind driver or adapter boundaries. OpenShell integrates with those systems rather than absorbing them.
+
+```mermaid
+flowchart TB
+    human["Human operator or automation"]
+    openshellclient["OpenShell CLI, SDK, or TUI"]
+    platformapi["Agentic Network Platform API"]
+    settings["Settings DB and Git-hydrated config"]
+    policy["Policy and rendered desired state"]
+    gateway["OpenShell Gateway"]
+    providers["Providers and inference routes"]
+    credentials["Credential and secret mappings"]
+    compute["Compute driver: Docker, Podman, VM, or Kubernetes"]
+    sandbox["Sandbox workload"]
+    supervisor["OpenShell Supervisor"]
+    agent["Restricted agent child process"]
+    localtools["Local tools: shell, Nornir, Ansible, Python"]
+    relays["Gateway relays: terminal, exec, file sync, logs"]
+    audit["OpenShell and platform audit"]
+
+    human --> openshellclient
+    human --> platformapi
+    platformapi --> settings
+    settings --> policy
+    openshellclient --> gateway
+    policy --> gateway
+    providers --> gateway
+    credentials --> gateway
+
+    gateway --> compute
+    compute --> sandbox
+    sandbox --> supervisor
+    supervisor --> agent
+    agent --> localtools
+
+    supervisor --> relays
+    relays --> gateway
+    gateway --> audit
+    supervisor --> audit
+```
+
+In this project, the Platform API and settings pipeline prepare the desired state that OpenShell should enforce. OpenShell remains responsible for sandbox lifecycle and runtime enforcement. The platform should not bypass the Gateway by mutating sandbox files or reaching directly into sandbox processes.
+
 ## Goals
 
 - Run the AI agent inside an OpenShell-managed sandbox/container.
