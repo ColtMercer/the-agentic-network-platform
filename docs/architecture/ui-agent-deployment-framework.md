@@ -409,8 +409,15 @@ packages/
   effective-config/        # Inheritance and snapshot resolution
   config-renderer/         # Jinja2-style renderer with schema validation
   deployment-planner/      # Deployment plan and diff generation
-  deployment-adapters/     # Local, Docker, Kubernetes, OpenShift, CI/CD
-  openshell-adapter/       # Gateway API integration and policy packaging
+  deployment-adapters/     # Compose, Helm, Kustomize, OpenShift, Nomad, CI/CD artifacts
+  runtime-contracts/       # Runtime-neutral bundles, capability declarations, sessions, evidence
+  runtime-adapters/        # Launch, terminal, file sync, health, evidence readback
+    openshell/             # Gateway and Supervisor integration
+    local-containers/      # Docker and Podman local mode
+    kubernetes/            # Kubernetes runtime fallback and exec proxy integration
+    openshift/             # OpenShift runtime fallback, SCC, Route, and runtime-class handling
+    nomad/                 # Nomad job lifecycle and Vault/Consul integration
+    hosted-sandboxes/      # E2B, Daytona, Cloudflare, Modal, and future hosted adapters
   identity-policy/         # User-delegated, agent-owned, hybrid identity rules
   evidence/                # Evidence bundle schema and provenance writers
 
@@ -445,8 +452,10 @@ flowchart TB
     effective["packages/effective-config"]
     renderer["packages/config-renderer"]
     planner["packages/deployment-planner"]
-    adapters["packages/deployment-adapters"]
-    openshellpkg["packages/openshell-adapter"]
+    deployadapters["packages/deployment-adapters"]
+    runtimecontracts["packages/runtime-contracts"]
+    runtimeadapters["packages/runtime-adapters"]
+    openshellruntime["packages/runtime-adapters/openshell"]
     identitypkg["packages/identity-policy"]
     evidencepkg["packages/evidence"]
     configrepo["configs/*"]
@@ -458,16 +467,21 @@ flowchart TB
     apiapp --> planner
     workerapp --> ingestor
     workerapp --> renderer
-    workerapp --> adapters
+    workerapp --> deployadapters
+    workerapp --> runtimeadapters
     workerapp --> evidencepkg
     ingestor --> configrepo
     ingestor --> schemas
     effective --> schemas
     renderer --> effective
+    renderer --> runtimecontracts
     planner --> renderer
-    adapters --> deployrepo
-    adapters --> openshellpkg
-    openshellpkg --> identitypkg
+    planner --> runtimecontracts
+    deployadapters --> deployrepo
+    runtimeadapters --> runtimecontracts
+    runtimeadapters --> identitypkg
+    runtimeadapters --> evidencepkg
+    openshellruntime --> runtimeadapters
     planner --> evidencepkg
 ```
 
@@ -478,8 +492,10 @@ Package rules:
 - `effective-config` computes inheritance and effective snapshots.
 - `config-renderer` turns snapshots into files and validates rendered output.
 - `deployment-planner` computes what would change for a target.
-- `deployment-adapters` produce target-specific artifacts.
-- `openshell-adapter` knows Gateway/Supervisor deployment semantics.
+- `deployment-adapters` produce target-specific deployment artifacts.
+- `runtime-contracts` owns runtime-neutral bundle, session, terminal, secret-reference, model-route, evidence, capability, and health schemas.
+- `runtime-adapters` translate runtime-neutral bundles into launch, terminal attach, file sync, secret-reference mapping, model routing, evidence collection, teardown, and health behavior.
+- `runtime-adapters/openshell` knows Gateway/Supervisor deployment semantics.
 - `apps/web` should never embed deployment rendering logic.
 
 ## Required APIs
@@ -571,4 +587,5 @@ Local mode should use:
 - Should customer CI/CD handoff support GitHub Actions first, Argo CD first, Tekton first, or generic Git PR first?
 - Should the local developer command be `tanp`, `agentic-network`, or a workspace task runner?
 - Should persona bundles be stored as OCI artifacts for promotion between environments?
+- What minimum runtime-adapter capability level is required before state-changing network automation can be enabled?
 - Should generated OpenShell Gateway config be pushed through the Gateway API or deployed as mounted config depending on target mode?

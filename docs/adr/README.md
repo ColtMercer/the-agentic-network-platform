@@ -12,6 +12,7 @@ Use an ADR when a decision:
 
 Suggested first ADRs:
 
+- [ADR-0001: Runtime strategy](0001-runtime-strategy.md)
 - delegated identity and OBO token propagation model
 - open-source license selection
 - first supported secret provider
