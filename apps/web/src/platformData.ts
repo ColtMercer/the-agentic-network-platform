@@ -197,6 +197,13 @@ export const personas: Array<{
   capabilities: string[]
 }> = [
   {
+    name: 'Orchestrator Agent',
+    mission: 'Coordinate A2A routing, persona selection, policy-aware planning, and evidence assembly.',
+    state: 'enabled',
+    tone: 'ok',
+    capabilities: ['a2a.route', 'policy.evaluate', 'evidence.assemble'],
+  },
+  {
     name: 'Engineering Agent',
     mission: 'Design and validate network changes.',
     state: 'enabled',

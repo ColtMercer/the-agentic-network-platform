@@ -15,7 +15,7 @@ The platform should:
 - Run agents inside NVIDIA OpenShell or compatible isolated runtimes.
 - Use A2A for agent-to-agent communication and discovery.
 - Use MCP for tool, context, and workflow integrations.
-- Treat `nornir-mcp` as a primary standalone project: a Nornir-based MCP server for safe network interaction across Netmiko, Scrapli, NAPALM, pyATS, Pynomi, and future drivers.
+- Treat `nornir-mcp` as a primary standalone project: a Nornir-based MCP server for safe network interaction across Netmiko, Scrapli, NAPALM, pyATS, pyVmomi, and future drivers.
 - Support configurable personas such as engineering, operations, security, documentation, and change-management agents.
 - Package procedural knowledge as versioned skills with validation criteria.
 - Provide governed episodic memory so agents can recall prior investigations, decisions, incidents, approvals, and user/team preferences with traceable provenance.
@@ -42,7 +42,7 @@ The platform should:
    Destructive or state-changing actions require explicit policy, approval, simulation, and audit trails.
 
 5. Identity is delegated, not inherited.
-   Effective permissions are the intersection of the user identity, persona policy, MCP server policy, and downstream target permissions.
+   Effective authorization intersects principal scope, persona policy, runtime policy, local tool policy, MCP tool policy, target permissions, credential scope, action risk, and approval state. The canonical invariant lives in [Threat Model](docs/architecture/threat-model.md#core-security-invariant).
 
 6. Knowledge must be traceable.
    Every answer, graph edge, and recommendation should link back to source documents, telemetry, configs, tickets, or tool output.
@@ -82,6 +82,9 @@ Repository governance files:
 
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [Issue-driven workflow](docs/governance/issue-driven-development.md)
+- [Security policy](SECURITY.md)
+- [Glossary](docs/glossary.md)
+- [Threat model](docs/architecture/threat-model.md)
 - [Feature issue form](.github/ISSUE_TEMPLATE/feature.yml)
 - [Bug issue form](.github/ISSUE_TEMPLATE/bug.yml)
 - [Design issue form](.github/ISSUE_TEMPLATE/design.yml)
@@ -118,7 +121,7 @@ flowchart TB
     policy[Policy Engine<br/>OPA / Cedar / OpenShell Policy]
     registry[Agent Registry<br/>Personas and A2A Cards]
     mcpRegistry[MCP Server Registry<br/>Capabilities / Scopes / Policies]
-    orchestrator[Coordinator Agent]
+    orchestrator[Orchestrator Agent]
 
     subgraph a2a[A2A Agent Mesh]
         eng[Engineering Agent]
@@ -141,7 +144,7 @@ flowchart TB
         nornir[MCP: Nornir Network Execution<br/>Netmiko / Scrapli / NAPALM / pyATS]
         telemetry[MCP: Telemetry<br/>Prometheus / Elastic / Logs]
         config[MCP: Config and GitOps<br/>Git / Ansible / NAPALM]
-        graph[MCP: Knowledge Graph<br/>Neo4j / RDF / Graph DB]
+        graphMcp[MCP: Knowledge Graph<br/>Neo4j / RDF / Graph DB]
         docsMcp[MCP: Documents<br/>Confluence / SharePoint / Git]
         changeMcp[MCP: ITSM and Change<br/>ServiceNow / Jira]
         labMcp[MCP: Lab Control<br/>OKD / Proxmox / Containerlab]
@@ -187,7 +190,7 @@ The platform should still define a runtime adapter so the control plane can supp
 ```mermaid
 flowchart LR
     task[User Request or Event]
-    planner[Coordinator Agent<br/>A2A Client and Server]
+    planner[Orchestrator Agent<br/>A2A Client and Server]
     card[Agent Card Lookup]
     persona[Persona Resolution]
     sandbox[OpenShell Sandbox]
@@ -229,7 +232,7 @@ flowchart TB
     subgraph projects[Standalone Projects]
         nornir[Nornir MCP]
         docs[Document Ingestion MCP]
-        graph[Knowledge Graph MCP]
+        graphProject[Knowledge Graph MCP]
         memory[Episodic Memory MCP]
         change[Change Management MCP]
     end
@@ -255,14 +258,15 @@ Each standalone project should have:
 
 ## Agent Personas
 
-Personas should be configuration, not hardcoded classes. A persona defines the agent mission, allowed skills, allowed MCP tools, model routing preferences, required approval levels, and runtime policy.
+Personas should be configuration, not hardcoded classes. A persona defines the agent mission, identity mode, allowed skills, allowed local and MCP tools, model routing preferences, required approval levels, and runtime policy.
 
-Example persona shape:
+Example persona shape. This is illustrative until `packages/settings-schema` becomes the executable schema contract.
 
 ```yaml
 id: network-engineering-agent
 display_name: Network Engineering Agent
 mission: Design, validate, and propose network changes with evidence.
+identity_mode: user_delegated
 runtime:
   provider: openshell
   policy: policies/openshell/network-engineering.yaml
@@ -275,17 +279,21 @@ skills:
   - skills/bgp-troubleshooting
   - skills/config-diff-review
   - skills/change-risk-assessment
+local_tools:
+  read:
+    - nornir.inventory.query
+    - nornir.command.run_readonly
+    - ansible.playbook.check
+  plan:
+    - nornir.config.plan
 mcp_tools:
   read:
     - sot.inventory.lookup
-    - nornir.inventory.query
-    - nornir.command.run_readonly
     - telemetry.query
     - graph.query
     - docs.search
     - git.read
   write:
-    - nornir.config.plan
     - git.propose_change
     - change.create_draft
 approvals:
@@ -308,6 +316,7 @@ memory:
 
 Initial personas:
 
+- Orchestrator Agent: coordinates user requests, A2A routing, persona selection, policy-aware planning, and evidence assembly.
 - Engineering Agent: designs changes, validates configs, produces diffs, checks standards, and prepares implementation plans.
 - Operations Agent: triages incidents, correlates telemetry, checks runbooks, and recommends restore actions.
 - Security Agent: reviews access, policy, exposed services, vulnerable devices, and risky tool use.
@@ -406,6 +415,8 @@ flowchart TB
 
 Episodic memory is separate from the knowledge graph, but they should reinforce each other. The knowledge graph represents durable network facts and relationships. Episodic memory represents time-bound experience: what was tried, who approved it, why a path was rejected, what evidence existed at the time, and what the agent should remember next time.
 
+MVP boundary: start with read-only recall of prior lab runs, investigations, and evidence bundles. Governed writes, redaction queues, legal hold, export, and advanced review workflows should land after the first read-only agent vertical slice proves identity, policy, evidence, and audit controls.
+
 ## MCP Tool Plane
 
 MCP servers should be small, composable, and policy-aware. Agents should not know vendor credentials or direct API details. The MCP broker handles auth, policy checks, tool discovery, request logging, and result shaping.
@@ -413,7 +424,7 @@ MCP servers should be small, composable, and policy-aware. Agents should not kno
 Initial MCP tool domains:
 
 - Inventory and source of truth: Nautobot, NetBox, Infrahub, CMDB, IPAM.
-- Network execution: `nornir-mcp` for inventory-backed command execution, collection, config planning, and driver routing across Netmiko, Scrapli, NAPALM, pyATS, Pynomi, and future adapters.
+- Network execution: `nornir-mcp` for inventory-backed command execution, collection, config planning, and driver routing across Netmiko, Scrapli, NAPALM, pyATS, pyVmomi, and future adapters.
 - Network config: Git, Ansible, NAPALM, pyATS, Scrapli, Nornir.
 - Telemetry and logs: Prometheus, Grafana, Elastic, Loki, OpenTelemetry.
 - Topology and graph: Neo4j, RDF stores, topology snapshots, dependency maps.
@@ -441,7 +452,7 @@ The purpose is to give agents a controlled way to interact with real networks wi
 Core requirements:
 
 - Use Nornir for inventory, host/group metadata, task execution, concurrency, and result aggregation.
-- Support multiple network drivers and libraries, including Netmiko, Scrapli, NAPALM, pyATS, Pynomi, and vendor-specific adapters where needed.
+- Support multiple network drivers and libraries, including Netmiko, Scrapli, NAPALM, pyATS, pyVmomi, and vendor-specific adapters where needed.
 - Maintain driver-selection knowledge as configuration and policy, not agent guesswork.
 - Select drivers from inventory metadata such as platform, network OS, device role, hardware model, site, tag, capability, and command family.
 - Support read-only collection as the default mode.
@@ -473,10 +484,10 @@ driver_rules:
       - show
       - collect
 
-  - name: vmware-use-pynomi
+  - name: vmware-use-pyvmomi
     match:
       platform_family: vmware
-    driver: pynomi
+    driver: pyvmomi
     allowed_actions:
       - query
       - collect
@@ -491,7 +502,7 @@ flowchart TB
     inventory[Inventory Adapter<br/>Nautobot / NetBox / Infrahub / YAML]
     secrets[Credential Broker]
     runner[Nornir Runner]
-    drivers[Driver Layer<br/>Netmiko / Scrapli / NAPALM / pyATS / Pynomi]
+    drivers[Driver Layer<br/>Netmiko / Scrapli / NAPALM / pyATS / pyVmomi]
     devices[Network Devices and Controllers]
     evidence[Structured Evidence Bundle]
     audit[Audit Log]
@@ -610,14 +621,19 @@ The graph should store provenance on every edge:
 
 The chat interface, CLI, and API must operate on behalf of the authenticated user. Agents and MCP servers must not become privilege-escalation paths.
 
-The platform should compute effective permissions for every request:
+The platform should compute effective authorization for every request using the canonical invariant in [Threat Model](docs/architecture/threat-model.md#core-security-invariant):
 
 ```text
-effective_permission = user_permission
-  intersect persona_permission
-  intersect mcp_server_permission
-  intersect target_system_permission
+effective_authorization =
+  principal_scope
+  intersect persona_policy
   intersect runtime_policy
+  intersect local_tool_policy
+  intersect mcp_tool_policy
+  intersect target_system_permission
+  intersect credential_scope
+  intersect action_risk_policy
+  intersect approval_state
 ```
 
 Requirements:
@@ -722,7 +738,7 @@ Required controls:
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant C as Coordinator Agent
+    participant C as Orchestrator Agent
     participant E as Engineering Agent
     participant O as Operations Agent
     participant G as Graph Agent
@@ -779,7 +795,7 @@ flowchart TB
         api[Platform API]
         a2a[A2A Gateway]
         mcp[MCP Broker]
-        graph[Graph Store]
+    graphStore[Graph Store]
         docs[Document Pipeline]
         skills[Skill Registry]
     end
@@ -799,7 +815,7 @@ flowchart TB
 
 ## Initial Repository Shape
 
-Proposed future structure:
+Illustrative future structure. The canonical deployment-oriented codebase layout is defined in [UI and Agent Deployment Framework Architecture](docs/architecture/ui-agent-deployment-framework.md#codebase-architecture).
 
 ```text
 .
@@ -825,7 +841,7 @@ Proposed future structure:
 │   ├── identity/
 │   └── test-harness/
 ├── agents/
-│   ├── coordinator/
+│   ├── orchestrator/
 │   ├── engineering/
 │   ├── operations/
 │   ├── security/
@@ -864,7 +880,7 @@ Proposed future structure:
 
 ## MVP Roadmap
 
-### Phase 0: Design and Threat Model
+### Platform Phase 0: Design and Threat Model
 
 - Define platform threat model.
 - Define monorepo project standards for standalone and integrated MCP servers.
@@ -879,10 +895,10 @@ Proposed future structure:
 - Define graph schema v0.
 - Define lab target architecture.
 
-### Phase 1: Read-Only Network Intelligence
+### Platform Phase 1: Read-Only Network Intelligence
 
-- Run coordinator and two personas in OpenShell sandboxes.
-- Implement A2A task routing between coordinator, engineering, and docs agents.
+- Run orchestrator and two personas in OpenShell sandboxes.
+- Implement A2A task routing between orchestrator, engineering, and docs agents.
 - Implement MCP tools for docs search, source-of-truth lookup, Git read, graph query, and read-only Nornir collection.
 - Implement `nornir-mcp` standalone mode with inventory query, driver explanation, and read-only command execution.
 - Publish initial roadmap issues for platform, `nornir-mcp`, identity, governance, and memory work.
@@ -891,17 +907,17 @@ Proposed future structure:
 - Implement read-only episodic memory recall for prior investigations and lab experiments.
 - Produce cited answers with evidence bundles.
 
-### Phase 2: Lab Automation and Validation
+### Platform Phase 2: Lab Automation and Validation
 
 - Add Containerlab or virtual network fixture.
 - Add config collection and parsing MCP tool.
-- Add `nornir-mcp` driver policy tests for Netmiko, Scrapli, NAPALM, pyATS, and Pynomi paths.
+- Add `nornir-mcp` driver policy tests for Netmiko, Scrapli, NAPALM, pyATS, and pyVmomi paths.
 - Add Batfish or equivalent validation path.
 - Add skills for BGP troubleshooting and config diff review.
 - Add governed memory writes for lab runs, failed validations, and successful remediation patterns.
 - Add policy tests that prove agents cannot access blocked files, networks, or tools.
 
-### Phase 3: Controlled Change Proposals
+### Platform Phase 3: Controlled Change Proposals
 
 - Add GitOps change proposal tool.
 - Add `nornir-mcp` config planning with dry-run, diff, validation, and approval requirements.
@@ -911,7 +927,7 @@ Proposed future structure:
 - Add immutable audit records.
 - Add change memory records for plan, approval, execution, validation, and rollback evidence.
 
-### Phase 4: Enterprise Pilot Readiness
+### Platform Phase 4: Enterprise Pilot Readiness
 
 - Add OIDC/SAML integration.
 - Add on-behalf-of identity propagation across chat, agents, MCP broker, MCP servers, and target systems.

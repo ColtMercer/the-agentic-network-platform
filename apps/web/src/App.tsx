@@ -182,7 +182,7 @@ function OperationsConsole() {
       <section className="chat-panel">
         <PanelHeader
           icon={Workflow}
-          title="Coordinator Agent"
+          title="Orchestrator Agent"
           meta="9 personas online"
           tone="dark"
         />
@@ -196,9 +196,9 @@ function OperationsConsole() {
           </div>
 
           <div className="message agent-message">
-            <div className="agent-avatar">C</div>
+            <div className="agent-avatar">O</div>
             <div>
-              <span>Coordinator - Engineering, Operations, Graph Steward</span>
+              <span>Orchestrator - Engineering, Operations, Graph Steward</span>
               <p>
                 I queried topology, ran read-only Nornir collection, checked
                 telemetry, and found related config drift near the uplink path.

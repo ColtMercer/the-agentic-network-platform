@@ -13,7 +13,7 @@ Nornir provides the inventory and task-execution framework. Driver adapters prov
 ## Requirements
 
 - Use Nornir for inventory, groups, host metadata, task execution, concurrency, and result aggregation.
-- Support Netmiko, Scrapli, NAPALM, pyATS, Pynomi, and future driver adapters.
+- Support Netmiko, Scrapli, NAPALM, pyATS, pyVmomi, and future driver adapters.
 - Keep driver selection in configuration and policy, not agent prompts.
 - Support inventory from Nautobot, NetBox, Infrahub, static YAML, and test fixtures.
 - Support read-only collection by default.
@@ -35,7 +35,7 @@ flowchart TB
     inventory[Inventory Providers<br/>Nautobot / NetBox / Infrahub / YAML]
     secrets[Credential Broker]
     nornir[Nornir Runtime]
-    drivers[Driver Adapters<br/>Netmiko / Scrapli / NAPALM / pyATS / Pynomi]
+    drivers[Driver Adapters<br/>Netmiko / Scrapli / NAPALM / pyATS / pyVmomi]
     parser[Parser Layer<br/>TextFSM / Genie / TTP / Native JSON]
     devices[Network Devices<br/>Routers / Switches / Load Balancers / Controllers]
     evidence[Evidence Bundle]
@@ -111,12 +111,12 @@ driver_rules:
       - parse
       - learn
 
-  - name: vmware-use-pynomi
-    description: Use Pynomi for VMware controller interactions.
+  - name: vmware-use-pyvmomi
+    description: Use pyVmomi for VMware controller interactions.
     priority: 90
     match:
       platform_family: vmware
-    driver: pynomi
+    driver: pyvmomi
     allowed_actions:
       - query
       - collect
@@ -174,14 +174,19 @@ Every request should include:
 - requested action
 - downstream identity mode
 
-Effective authorization:
+Effective authorization must follow the platform invariant in [Threat Model](../../docs/architecture/threat-model.md#core-security-invariant). For `nornir-mcp`, that means Nornir-specific policy, target-device permission, and credential scope are part of the broader effective authorization decision.
 
 ```text
-effective_permission = user_permission
-  intersect persona_permission
-  intersect nornir_mcp_policy
-  intersect target_device_permission
+effective_authorization =
+  principal_scope
+  intersect persona_policy
+  intersect runtime_policy
+  intersect local_tool_policy
+  intersect mcp_tool_policy
+  intersect target_system_permission
   intersect credential_scope
+  intersect action_risk_policy
+  intersect approval_state
 ```
 
 Downstream identity modes:
