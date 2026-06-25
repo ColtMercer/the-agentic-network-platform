@@ -21,6 +21,7 @@ References:
 - NVIDIA OpenShell overview: https://docs.nvidia.com/openshell/about/overview
 - NVIDIA OpenShell runtime model: https://docs.nvidia.com/openshell/about/how-it-works
 - Existing UI deployment decision: [Web UI Deployment Architecture](web-ui-deployment.md)
+- Canonical security invariant: [Threat Model](threat-model.md#core-security-invariant)
 
 ## OpenShell and Gateway Primer
 
@@ -330,12 +331,14 @@ flowchart TB
 Inheritance should be conservative:
 
 - Configuration precedence can override defaults, but permissions are not simply additive.
-- Effective authorization is the intersection of user identity or agent-owned identity, persona policy, runtime policy, local tool policy, MCP tool policy, target system permissions, and action risk.
+- Effective authorization must follow the canonical invariant in [Threat Model](threat-model.md#core-security-invariant).
 - Runtime overrides must have TTL, owner, reason, and audit ID.
 - Any durable change should move through Git PR review.
 - Rendered runtime config should be reproducible from database snapshot ID, template version, Git commit SHA, and policy revision.
 
 This model is intentionally similar to a NetObs or Nautobot render pipeline: structured settings and source-of-truth records feed deterministic templates, and the resulting config is promoted to a runtime. The difference is that agent security policy must be evaluated before and after rendering because config output can grant shell, tool, model, secret, and network reach.
+
+Short-lived runtime overrides should never become invisible permanent state. When an override expires, the effective snapshot should be recomputed from the selected Git revision, imported DB settings, and remaining valid overrides. Reconciliation jobs should detect drift between Git-backed imported settings and DB effective state, emit audit events, and show the UI whether the current runtime is Git-synced, draft, overridden, expired, or drifted.
 
 ## Settings Database Sketch
 
@@ -432,7 +435,7 @@ flowchart TB
     secrets["Credential references"]
     runner["Nornir runner"]
     scripts["Custom Nornir scripts"]
-    drivers["Netmiko, Scrapli, NAPALM, pyATS, Pynomi"]
+    drivers["Netmiko, Scrapli, NAPALM, pyATS, pyVmomi"]
     targets["Network devices and controllers"]
     parser["Parsing and normalization"]
     evidence["Evidence bundle"]
@@ -497,10 +500,10 @@ driver_rules:
       - show
       - collect
 
-  - name: vmware-use-pynomi
+  - name: vmware-use-pyvmomi
     match:
       platform_family: vmware
-    driver: pynomi
+    driver: pyvmomi
     allowed_actions:
       - query
       - collect
@@ -642,7 +645,7 @@ Persona rendering should use the same materialization pipeline as runtime config
 
 ## Capability Phases
 
-Phase 1: read-only local runtime
+Runtime Phase 1: read-only local runtime
 
 - Build `network-agent-runtime` image.
 - Run the orchestrator agent in OpenShell with a local dev workspace.
@@ -650,7 +653,7 @@ Phase 1: read-only local runtime
 - Provide Nornir SDK, Nornir shell usage, Ansible CLI, inventory query, and read-only command execution.
 - Emit evidence bundles and audit events.
 
-Phase 2: custom scripts
+Runtime Phase 2: custom scripts
 
 - Add Git-backed script source registration.
 - Add script validation and constrained script execution.
@@ -658,19 +661,19 @@ Phase 2: custom scripts
 - Add large collection compaction so raw network output is stored as evidence and summarized for agent context.
 - Add script run history in the UI.
 
-Phase 3: data collection and pipelines
+Runtime Phase 3: data collection and pipelines
 
 - Add scheduled and event-triggered Nornir collection jobs.
 - Feed collected evidence into object storage, graph updates, RAG indexes, and episodic memory proposals.
 - Add regression tests for parser and collection behavior.
 
-Phase 4: automation planning
+Runtime Phase 4: automation planning
 
 - Add Nornir `config.plan` for config diffs and validation.
 - Add dry-run evidence and rollback planning.
 - Keep Nornir `config.apply` disabled or approval-gated.
 
-Phase 5: change execution
+Runtime Phase 5: change execution
 
 - Integrate change control, approvals, maintenance windows, and post-check evidence.
 - Enable apply only through change-policy gates.

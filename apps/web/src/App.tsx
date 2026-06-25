@@ -177,13 +177,15 @@ function TopBar({
 }
 
 function OperationsConsole() {
+  const onlinePersonaCount = personas.filter((persona) => persona.state === 'enabled').length
+
   return (
     <div className="console-grid">
       <section className="chat-panel">
         <PanelHeader
           icon={Workflow}
-          title="Coordinator Agent"
-          meta="9 personas online"
+          title="Orchestrator Agent"
+          meta={`${onlinePersonaCount} personas online`}
           tone="dark"
         />
         <div className="message-list">
@@ -196,9 +198,9 @@ function OperationsConsole() {
           </div>
 
           <div className="message agent-message">
-            <div className="agent-avatar">C</div>
+            <div className="agent-avatar">O</div>
             <div>
-              <span>Coordinator - Engineering, Operations, Graph Steward</span>
+              <span>Orchestrator - Engineering, Operations, Graph Steward</span>
               <p>
                 I queried topology, ran read-only Nornir collection, checked
                 telemetry, and found related config drift near the uplink path.

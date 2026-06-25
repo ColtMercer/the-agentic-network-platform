@@ -211,6 +211,13 @@ export const personas: Array<{
     capabilities: ['telemetry.query', 'nornir.command.run_readonly', 'memory.recall'],
   },
   {
+    name: 'Graph Steward',
+    mission: 'Maintain topology context, service relationships, and stale-edge review.',
+    state: 'enabled',
+    tone: 'ok',
+    capabilities: ['graph.query', 'graph.validate', 'topology.explain'],
+  },
+  {
     name: 'Security Agent',
     mission: 'Review identity, policy, and risky tool use.',
     state: 'approval required',
