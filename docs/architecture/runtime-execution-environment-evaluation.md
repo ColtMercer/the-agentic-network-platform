@@ -62,6 +62,8 @@ The adapter contract should preserve these invariants:
 | Modal Sandboxes | Hosted elastic compute sandbox | ML, data, GPU, burst workloads | No | Low to medium | Hosted runtime and private network assumptions |
 | HashiCorp Nomad | Workload orchestrator | Existing HashiCorp shops and mixed workloads | Yes | Medium to high | No built-in agent supervisor or inference policy model |
 
+Vendor capabilities reflect public documentation reviewed on 2026-06-25. Verify current self-hosting, air-gap, networking, and enterprise-support claims before committing to any non-OpenShell adapter.
+
 ## Portability Architecture
 
 The platform should render a runtime-neutral desired state first, then let adapters translate it into OpenShell Gateway config, Docker Compose files, Kubernetes manifests, OpenShift overlays, Nomad jobs, or hosted sandbox API calls.
@@ -149,6 +151,8 @@ Required adapter capabilities:
 
 Scores are relative for this product, from 1 low to 5 high.
 
+`Overall fit` is a product judgment, not an arithmetic average of the other columns.
+
 | Runtime | Agent security fit | On-prem fit | Private network reach | Terminal and file workflow | Secrets and identity fit | Portability | Operational burden | Overall fit |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | OpenShell | 5 | 4 | 5 | 5 | 5 | 4 | 3 | 5 |
@@ -222,6 +226,8 @@ Weaknesses:
 - We will need to track OpenShell API and policy evolution closely.
 - Customers may resist adopting an unfamiliar runtime if they already have OpenShift, Kubernetes, Nomad, or internal sandbox standards.
 - Some controls may be OpenShell-specific unless the platform keeps a neutral adapter layer.
+
+The runtime adapter contract is the mitigation for those weaknesses: OpenShell remains the gold-standard adapter, while non-OpenShell adapters must declare any missing or degraded controls in deployment planning.
 
 Product opinion:
 
@@ -645,21 +651,25 @@ Nomad should be a customer-driven adapter. If a first customer is a HashiCorp sh
 
 ## Recommended Product Shape
 
-The codebase should separate the platform from the runtime.
+The codebase should separate the platform from the runtime. The canonical repo layout is defined in [UI and Agent Deployment Framework Architecture](ui-agent-deployment-framework.md#codebase-architecture); this section refines that layout by making runtime contracts and runtime adapters explicit.
+
+Deployment adapters emit artifacts such as Compose, Helm, Kustomize, OpenShift overlays, Nomad job specs, or customer CI/CD bundles. Runtime adapters own launch, terminal/session attach, file sync, secret-reference mapping, runtime health, and evidence readback for a selected execution environment.
 
 ```mermaid
 flowchart TB
     subgraph control["Platform control plane"]
         ui["apps/web"]
-        api["services/platform-api"]
-        settings["packages/settings-model"]
-        policy["packages/policy-engine"]
+        api["apps/platform-api"]
+        settings["packages/settings-schema"]
+        effective["packages/effective-config"]
+        policy["packages/identity-policy"]
         planner["packages/deployment-planner"]
-        renderer["packages/template-renderer"]
+        renderer["packages/config-renderer"]
     end
 
     subgraph neutral["Runtime-neutral layer"]
-        bundle["Agent runtime bundle schema"]
+        contracts["packages/runtime-contracts"]
+        bundle["Agent runtime bundle"]
         personas["Persona and skill materializer"]
         sessions["Terminal and session abstraction"]
         evidence["Evidence bundle abstraction"]
@@ -677,10 +687,12 @@ flowchart TB
 
     ui --> api
     api --> settings
-    settings --> policy
+    settings --> effective
+    effective --> policy
     policy --> planner
     planner --> renderer
-    renderer --> bundle
+    renderer --> contracts
+    contracts --> bundle
     bundle --> personas
     bundle --> sessions
     bundle --> evidence
@@ -698,6 +710,7 @@ Recommended repository direction:
 
 | Area | Responsibility |
 | --- | --- |
+| `packages/deployment-adapters` | Render target-specific deployment artifacts such as Compose files, Helm values, Kustomize overlays, OpenShift overlays, Nomad job specs, and CI/CD bundles. |
 | `packages/runtime-contracts` | Runtime-neutral schemas for personas, sessions, terminals, files, secrets, model routes, evidence, policy capabilities, and health. |
 | `packages/runtime-adapters/openshell` | Gateway, Supervisor, policy, providers, inference routing, sandbox lifecycle, relay, and evidence integration. |
 | `packages/runtime-adapters/local-containers` | Docker and Podman local contributor mode with platform shell wrapper and local evidence store. |
