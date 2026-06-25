@@ -197,13 +197,6 @@ export const personas: Array<{
   capabilities: string[]
 }> = [
   {
-    name: 'Orchestrator Agent',
-    mission: 'Coordinate A2A routing, persona selection, policy-aware planning, and evidence assembly.',
-    state: 'enabled',
-    tone: 'ok',
-    capabilities: ['a2a.route', 'policy.evaluate', 'evidence.assemble'],
-  },
-  {
     name: 'Engineering Agent',
     mission: 'Design and validate network changes.',
     state: 'enabled',
@@ -216,6 +209,13 @@ export const personas: Array<{
     state: 'enabled',
     tone: 'ok',
     capabilities: ['telemetry.query', 'nornir.command.run_readonly', 'memory.recall'],
+  },
+  {
+    name: 'Graph Steward',
+    mission: 'Maintain topology context, service relationships, and stale-edge review.',
+    state: 'enabled',
+    tone: 'ok',
+    capabilities: ['graph.query', 'graph.validate', 'topology.explain'],
   },
   {
     name: 'Security Agent',

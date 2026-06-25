@@ -6,7 +6,7 @@ The Agentic Network Platform is intended to run network AI agents with enterpris
 
 Do not open a public GitHub issue for suspected vulnerabilities.
 
-Until GitHub private vulnerability reporting is enabled for this repository, report security issues directly to the project maintainer through a private channel. Include:
+Until GitHub private vulnerability reporting is enabled for this repository, report security issues directly to the project maintainer at `coltmercer@gmail.com`. Include:
 
 - affected component or document
 - version, commit SHA, or branch

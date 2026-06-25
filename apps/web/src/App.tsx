@@ -177,13 +177,15 @@ function TopBar({
 }
 
 function OperationsConsole() {
+  const onlinePersonaCount = personas.filter((persona) => persona.state === 'enabled').length
+
   return (
     <div className="console-grid">
       <section className="chat-panel">
         <PanelHeader
           icon={Workflow}
           title="Orchestrator Agent"
-          meta="9 personas online"
+          meta={`${onlinePersonaCount} personas online`}
           tone="dark"
         />
         <div className="message-list">
