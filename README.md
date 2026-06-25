@@ -110,6 +110,10 @@ The UI-to-deployment design is captured in [UI and Agent Deployment Framework Ar
 
 It defines how UI settings hydrate the settings database, render orchestrator and persona bundles, produce OpenShell runtime config, and generate deployment packages for local, Docker, Kubernetes, OpenShift, and customer CI/CD targets.
 
+The runtime portability and competitor evaluation is captured in [Runtime Execution Environment Evaluation](docs/architecture/runtime-execution-environment-evaluation.md).
+
+It compares NVIDIA OpenShell, Docker/Podman, Kubernetes, OpenShift, E2B, Daytona, Cloudflare, Modal, and Nomad, then recommends an OpenShell-first but runtime-adapter-driven product strategy.
+
 ## High-Level Architecture
 
 ```mermaid
