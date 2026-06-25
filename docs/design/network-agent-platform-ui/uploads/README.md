@@ -87,26 +87,6 @@ Repository governance files:
 - [Design issue form](.github/ISSUE_TEMPLATE/design.yml)
 - [Pull request template](.github/pull_request_template.md)
 
-## Web UI
-
-The production web app lives in [apps/web](apps/web/README.md).
-
-The imported UI design reference lives in [docs/design/network-agent-platform-ui](docs/design/network-agent-platform-ui/README.md).
-
-Deployment decision: the UI should run as a dedicated service, not inside an NVIDIA OpenShell agent sandbox. OpenShell is the isolated agent runtime; the UI is the human-facing control plane that calls Platform APIs with delegated identity.
-
-See [Web UI Deployment Architecture](docs/architecture/web-ui-deployment.md).
-
-## Agent Runtime Design
-
-The first capability-focused runtime design is captured in [OpenShell Nornir Agent Runtime Architecture](docs/architecture/openshell-nornir-agent-runtime.md).
-
-It defines the secure OpenShell sandbox model, governed terminal access, Nornir-first execution environment, custom script controls, settings database inheritance, Git-backed configuration flow, and the initial capability phases for collection and automation planning.
-
-The UI-to-deployment design is captured in [UI and Agent Deployment Framework Architecture](docs/architecture/ui-agent-deployment-framework.md).
-
-It defines how UI settings hydrate the settings database, render orchestrator and persona bundles, produce OpenShell runtime config, and generate deployment packages for local, Docker, Kubernetes, OpenShift, and customer CI/CD targets.
-
 ## High-Level Architecture
 
 ```mermaid
@@ -804,12 +784,9 @@ Proposed future structure:
 ```text
 .
 ├── README.md
-├── apps/
-│   └── web/
 ├── docs/
 │   ├── architecture/
 │   ├── adr/
-│   ├── design/
 │   ├── governance/
 │   ├── security/
 │   └── lab/

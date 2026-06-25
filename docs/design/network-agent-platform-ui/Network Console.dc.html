@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  @keyframes pulseCrit { 0%,100% { box-shadow: 0 0 0 0 rgba(255,92,105,0.45); } 50% { box-shadow: 0 0 0 7px rgba(255,92,105,0); } }
+  @keyframes dashFlow { to { stroke-dashoffset: -16; } }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+</style>
+</helmet>
+<div style="width:max-content; min-width:100%; min-height:100vh; box-sizing:border-box; padding:48px; background:#e7e5df; font-family:'IBM Plex Sans',system-ui,sans-serif;">
+
+  <div style="margin-bottom:40px; max-width:760px;">
+    <div style="font:600 12px 'IBM Plex Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:#9a958c; margin-bottom:10px;">Agentic Network Platform &nbsp;/&nbsp; Operations Console</div>
+    <h1 style="font:700 30px 'IBM Plex Sans',sans-serif; color:#2b2926; margin:0 0 10px;">Three directions to compare</h1>
+    <p style="font:400 15px/1.55 'IBM Plex Sans',sans-serif; color:#6b675f; margin:0; text-wrap:pretty;">Chat-driven on the left by default; on the right, a configurable panel area the agent can build &mdash; here showing a live Neo4j topology with issue overlays and a 9-persona A2A task board. Same scenario across all three: investigating an intermittent eBGP drop on <span style="font-family:'IBM Plex Mono',monospace; font-size:13px;">core-rtr-02</span>.</p>
+  </div>
+
+  <div style="display:flex; gap:48px; align-items:flex-start;">
+    <!-- ========================= DIRECTION 1 — NOC DARK ========================= -->
+    <div style="flex:none; width:1360px;">
+      <div style="margin-bottom:14px;">
+        <div style="font:600 11px 'IBM Plex Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:#9a958c;">Direction 1</div>
+        <div style="font:600 17px 'IBM Plex Sans',sans-serif; color:#2b2926; margin-top:3px;">NOC Dark &mdash; dense control room</div>
+        <div style="font:400 13px 'IBM Plex Sans',sans-serif; color:#7a766d; margin-top:2px;">High-contrast, monospace-forward. Built for engineers watching a live investigation.</div>
+      </div>
+
+      <div style="width:1360px; height:884px; background:#0d1117; border:1px solid #232a35; border-radius:12px; overflow:hidden; box-shadow:0 24px 60px -20px rgba(0,0,0,0.4); color:#e6edf3; display:flex; flex-direction:column;">
+
+        <!-- top bar -->
+        <div style="height:52px; flex:none; border-bottom:1px solid #232a35; display:flex; align-items:center; padding:0 16px; gap:14px; background:#0f141c;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <div style="width:22px; height:22px; border-radius:6px; background:linear-gradient(135deg,#56c8ff,#3a7bd5); display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#06121f;">N</div>
+            <span style="font:600 14px 'IBM Plex Sans',sans-serif; color:#e6edf3;">NetMesh</span>
+          </div>
+          <div style="width:1px; height:20px; background:#232a35;"></div>
+          <span style="font:500 13px 'IBM Plex Sans',sans-serif; color:#8b949e;">Operations Console</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#56c8ff; background:rgba(86,200,255,0.1); border:1px solid rgba(86,200,255,0.25); padding:2px 8px; border-radius:5px;">INC-1192</span>
+          <div style="flex:1;"></div>
+          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#f0b429; background:rgba(240,180,41,0.1); border:1px solid rgba(240,180,41,0.25); padding:3px 9px; border-radius:5px;">env: lab</span>
+          <div style="display:flex; align-items:center; gap:8px; padding:3px 4px 3px 10px; border:1px solid #232a35; border-radius:20px;">
+            <span style="font:500 12px 'IBM Plex Sans',sans-serif; color:#c9d1d9;">j.rivera</span>
+            <span style="font:500 9px 'IBM Plex Mono',monospace; color:#6e7681; background:#1c2230; padding:2px 5px; border-radius:4px;">OBO</span>
+            <div style="width:24px; height:24px; border-radius:50%; background:#2a3645; display:flex; align-items:center; justify-content:center; font:600 11px 'IBM Plex Mono',monospace; color:#9fb4c8;">JR</div>
+          </div>
+        </div>
+
+        <!-- body -->
+        <div style="flex:1; display:flex; min-height:0;">
+
+          <!-- chat column -->
+          <div style="width:510px; flex:none; border-right:1px solid #232a35; display:flex; flex-direction:column; min-height:0; background:#0d1117;">
+            <div style="height:54px; flex:none; border-bottom:1px solid #232a35; display:flex; align-items:center; gap:11px; padding:0 16px;">
+              <div style="position:relative;">
+                <div style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#56c8ff,#3a7bd5); display:flex; align-items:center; justify-content:center; font:700 13px 'IBM Plex Mono',monospace; color:#06121f;">C</div>
+                <div style="position:absolute; right:-2px; bottom:-2px; width:9px; height:9px; border-radius:50%; background:#3fb950; border:2px solid #0d1117;"></div>
+              </div>
+              <div style="flex:1;">
+                <div style="font:600 13px 'IBM Plex Sans',sans-serif; color:#e6edf3;">Coordinator Agent</div>
+                <div style="font:400 11px 'IBM Plex Mono',monospace; color:#6e7681;">orchestrating &middot; 9 personas online</div>
+              </div>
+              <span style="font:500 10px 'IBM Plex Mono',monospace; color:#3fb950; display:flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:#3fb950;display:inline-block;"></span>LIVE</span>
+            </div>
+
+            <!-- messages -->
+            <div style="flex:1; overflow:hidden; padding:18px 16px; display:flex; flex-direction:column; gap:16px;">
+
+              <!-- user -->
+              <div style="align-self:flex-end; max-width:88%;">
+                <div style="font:500 10px 'IBM Plex Mono',monospace; color:#6e7681; text-align:right; margin-bottom:5px;">You &middot; 14:02</div>
+                <div style="background:#1c2230; border:1px solid #2a3340; border-radius:12px 12px 4px 12px; padding:11px 13px; font:400 13px/1.5 'IBM Plex Sans',sans-serif; color:#dbe3ec;">core-rtr-02 keeps dropping its eBGP session to the upstream provider (AS65010) &mdash; intermittent. Investigate and show me the topology around it.</div>
+              </div>
+
+              <!-- agent -->
+              <div style="display:flex; gap:10px; max-width:100%;">
+                <div style="width:28px; height:28px; flex:none; border-radius:8px; background:linear-gradient(135deg,#56c8ff,#3a7bd5); display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#06121f;">C</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px; flex-wrap:wrap;">
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3;">Coordinator</span>
+                    <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6e7681;">&rarr; Engineering &middot; Operations &middot; Graph Steward</span>
+                  </div>
+                  <div style="font:400 13px/1.55 'IBM Plex Sans',sans-serif; color:#c9d1d9; margin-bottom:12px;">I queried the knowledge graph for the topology around <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#56c8ff;">core-rtr-02</span> and ran read-only checks. The eBGP peer is flapping and I found a related config drift. Findings:</div>
+
+                  <!-- evidence -->
+                  <div style="font:600 10px 'IBM Plex Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; color:#6e7681; margin-bottom:8px;">Evidence &middot; 3</div>
+                  <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:13px;">
+
+                    <div style="display:flex; gap:10px; background:#11161e; border:1px solid #232a35; border-left:3px solid #ff5c69; border-radius:8px; padding:10px 12px;">
+                      <div style="flex:1; min-width:0;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
+                          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#56c8ff;">nornir.command.run_readonly</span>
+                          <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6e7681;">core-rtr-02</span>
+                        </div>
+                        <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#c9d1d9; background:#0a0e14; border-radius:5px; padding:6px 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">neighbor 203.0.113.1 <span style="color:#ff5c69;">Idle</span> (was Established 2h12m)</div>
+                      </div>
+                    </div>
+
+                    <div style="display:flex; gap:10px; background:#11161e; border:1px solid #232a35; border-left:3px solid #f0b429; border-radius:8px; padding:10px 12px;">
+                      <div style="flex:1; min-width:0;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
+                          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#56c8ff;">nornir.config.plan &middot; diff</span>
+                          <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6e7681;">dist-sw-01</span>
+                        </div>
+                        <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#c9d1d9; background:#0a0e14; border-radius:5px; padding:6px 8px;"><span style="color:#3fb950;">+</span> route-map RM-UPLINK &middot; <span style="color:#f0b429;">3 lines drift</span></div>
+                      </div>
+                    </div>
+
+                    <div style="display:flex; gap:10px; background:#11161e; border:1px solid #232a35; border-left:3px solid #56c8ff; border-radius:8px; padding:10px 12px;">
+                      <div style="flex:1; min-width:0;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
+                          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#56c8ff;">telemetry.query</span>
+                          <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6e7681;">prometheus</span>
+                        </div>
+                        <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#c9d1d9; background:#0a0e14; border-radius:5px; padding:6px 8px;">bgp_session_flaps = <span style="color:#56c8ff;">12</span> over 2h &middot; peer AS65010</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- citations -->
+                  <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#9fb4c8; background:#161b22; border:1px solid #232a35; padding:3px 8px; border-radius:14px;">[1] RB-BGP-014</span>
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#9fb4c8; background:#161b22; border:1px solid #232a35; padding:3px 8px; border-radius:14px;">[2] INC-1187</span>
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#9fb4c8; background:#161b22; border:1px solid #232a35; padding:3px 8px; border-radius:14px;">[3] Neo4j snapshot 14:01</span>
+                  </div>
+
+                  <!-- audit footer -->
+                  <div style="display:flex; align-items:center; gap:10px; padding-top:11px; border-top:1px solid #232a35; flex-wrap:wrap;">
+                    <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6e7681;">audit <span style="color:#9fb4c8;">aud-7f3c91</span></span>
+                    <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6e7681;">identity <span style="color:#9fb4c8;">j.rivera (OBO)</span></span>
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#3fb950;">&#10003; policy: read-only</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- typing -->
+              <div style="display:flex; gap:10px; align-items:center;">
+                <div style="width:28px; height:28px; flex:none; border-radius:8px; background:#2a3340; display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#9fb4c8;">E</div>
+                <div style="font:400 12px 'IBM Plex Sans',sans-serif; color:#8b949e; display:flex; align-items:center; gap:7px;">Engineering is drafting a config diff
+                  <span style="display:inline-flex; gap:3px;">
+                    <span style="width:5px;height:5px;border-radius:50%;background:#56c8ff;animation:blink 1.2s infinite;"></span>
+                    <span style="width:5px;height:5px;border-radius:50%;background:#56c8ff;animation:blink 1.2s infinite 0.2s;"></span>
+                    <span style="width:5px;height:5px;border-radius:50%;background:#56c8ff;animation:blink 1.2s infinite 0.4s;"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- composer -->
+            <div style="flex:none; border-top:1px solid #232a35; padding:12px 16px;">
+              <div style="display:flex; align-items:center; gap:8px; background:#11161e; border:1px solid #2a3340; border-radius:11px; padding:8px 8px 8px 13px;">
+                <span style="font:400 13px 'IBM Plex Sans',sans-serif; color:#6e7681; flex:1;">Message the network agent&hellip;</span>
+                <span style="font:500 10px 'IBM Plex Mono',monospace; color:#8b949e; background:#1c2230; border:1px solid #2a3340; padding:4px 8px; border-radius:6px;">7 tools</span>
+                <div style="width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg,#56c8ff,#3a7bd5); display:flex; align-items:center; justify-content:center;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#06121f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </div>
+              </div>
+              <div style="font:400 10px 'IBM Plex Mono',monospace; color:#6e7681; margin-top:7px; text-align:center;">Persona: Coordinator &middot; effective perms = user &cap; persona &cap; tool &cap; target</div>
+            </div>
+          </div>
+
+          <!-- right panel column -->
+          <div style="flex:1; min-width:0; padding:16px; display:flex; flex-direction:column; gap:14px;">
+
+            <!-- topology panel -->
+            <div style="flex:1; min-height:0; background:#11161e; border:1px solid #232a35; border-radius:11px; display:flex; flex-direction:column; overflow:hidden;">
+              <div style="height:46px; flex:none; border-bottom:1px solid #232a35; display:flex; align-items:center; gap:10px; padding:0 14px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#56c8ff" stroke-width="2"><circle cx="5" cy="6" r="3"/><circle cx="19" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M7.5 7.5 11 16M16.5 7.5 13 16"/></svg>
+                <span style="font:600 13px 'IBM Plex Sans',sans-serif; color:#e6edf3;">Topology</span>
+                <span style="font:400 11px 'IBM Plex Mono',monospace; color:#6e7681;">core-rtr-02 neighborhood</span>
+                <span style="font:500 10px 'IBM Plex Mono',monospace; color:#a371f7; background:rgba(163,113,247,0.1); border:1px solid rgba(163,113,247,0.25); padding:2px 7px; border-radius:5px;">Neo4j</span>
+                <div style="flex:1;"></div>
+                <!-- legend -->
+                <span style="font:400 10px 'IBM Plex Mono',monospace; color:#8b949e; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#ff5c69;"></span>critical</span>
+                <span style="font:400 10px 'IBM Plex Mono',monospace; color:#8b949e; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#f0b429;"></span>warning</span>
+                <span style="font:400 10px 'IBM Plex Mono',monospace; color:#8b949e; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#a371f7;"></span>proposed</span>
+                <div style="width:1px; height:18px; background:#232a35; margin:0 4px;"></div>
+                <span style="font:500 11px 'IBM Plex Mono',monospace; color:#8b949e; border:1px solid #232a35; border-radius:6px; padding:3px 8px;">&#8853;</span>
+                <span style="font:500 11px 'IBM Plex Mono',monospace; color:#8b949e; border:1px solid #232a35; border-radius:6px; padding:3px 8px;">&#8854;</span>
+                <span style="font:500 11px 'IBM Plex Mono',monospace; color:#8b949e; border:1px solid #232a35; border-radius:6px; padding:3px 8px;">fit</span>
+              </div>
+
+              <!-- graph -->
+              <div style="flex:1; position:relative; background:radial-gradient(circle at 50% 40%, #131a24, #0d1117); background-image:radial-gradient(#1a2230 1px, transparent 1px); background-size:22px 22px;">
+                <svg style="position:absolute; inset:0; width:100%; height:100%;" viewBox="0 0 786 392" preserveAspectRatio="xMidYMid meet">
+                  <line x1="95" y1="95" x2="300" y2="80" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="300" y1="80" x2="490" y2="80" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="490" y1="80" x2="690" y2="95" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="300" y1="80" x2="245" y2="220" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="300" y1="80" x2="545" y2="220" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="490" y1="80" x2="245" y2="220" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="490" y1="80" x2="545" y2="220" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="245" y1="220" x2="150" y2="330" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="245" y1="220" x2="400" y2="330" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="545" y1="220" x2="400" y2="330" stroke="#2f3742" stroke-width="1.6"/>
+                  <line x1="545" y1="220" x2="650" y2="330" stroke="#2f3742" stroke-width="1.6"/>
+                  <!-- down link -->
+                  <line x1="95" y1="95" x2="490" y2="80" stroke="#ff5c69" stroke-width="2" stroke-dasharray="7 5" style="animation:dashFlow 1s linear infinite;"/>
+                </svg>
+
+                <!-- nodes -->
+                <!-- wan-edge-01 -->
+                <div style="position:absolute; left:12.1%; top:24.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:42px;height:42px;border-radius:50%;background:#1c2230;border:1.5px solid #6e7681;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#9fb4c8;">WAN</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#8b949e;white-space:nowrap;">wan-edge-01</div>
+                </div>
+                <!-- core-rtr-01 -->
+                <div style="position:absolute; left:38.2%; top:20.4%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:42px;height:42px;border-radius:50%;background:#102030;border:1.5px solid #56c8ff;display:flex;align-items:center;justify-content:center;font:600 13px 'IBM Plex Mono',monospace;color:#56c8ff;">R</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#8b949e;white-space:nowrap;">core-rtr-01</div>
+                </div>
+                <!-- core-rtr-02 CRITICAL -->
+                <div style="position:absolute; left:62.3%; top:20.4%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px; z-index:3;">
+                  <div style="position:relative;">
+                    <div style="width:46px;height:46px;border-radius:50%;background:#241015;border:2px solid #ff5c69;display:flex;align-items:center;justify-content:center;font:600 13px 'IBM Plex Mono',monospace;color:#ff8a93;animation:pulseCrit 1.8s infinite;">R</div>
+                    <div style="position:absolute; top:-9px; right:-12px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#ff5c69; padding:2px 6px; border-radius:9px; white-space:nowrap;">BGP Idle</div>
+                  </div>
+                  <div style="font:600 11px 'IBM Plex Mono',monospace;color:#ff8a93;white-space:nowrap;">core-rtr-02</div>
+                </div>
+                <!-- edge-fw-01 PROPOSED -->
+                <div style="position:absolute; left:87.8%; top:24.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="position:relative;">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#1a1428;border:1.5px dashed #a371f7;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#c4a4f7;">FW</div>
+                    <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#a371f7; padding:2px 6px; border-radius:9px; white-space:nowrap;">+ACL</div>
+                  </div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#8b949e;white-space:nowrap;">edge-fw-01</div>
+                </div>
+                <!-- dist-sw-01 WARNING -->
+                <div style="position:absolute; left:31.2%; top:56.1%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="position:relative;">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#241e0f;border:1.5px solid #f0b429;display:flex;align-items:center;justify-content:center;font:600 12px 'IBM Plex Mono',monospace;color:#f0c560;">SW</div>
+                    <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#1a1407; background:#f0b429; padding:2px 6px; border-radius:9px; white-space:nowrap;">drift</div>
+                  </div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#8b949e;white-space:nowrap;">dist-sw-01</div>
+                </div>
+                <!-- dist-sw-02 -->
+                <div style="position:absolute; left:69.3%; top:56.1%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:42px;height:42px;border-radius:50%;background:#102030;border:1.5px solid #56c8ff;display:flex;align-items:center;justify-content:center;font:600 12px 'IBM Plex Mono',monospace;color:#56c8ff;">SW</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#8b949e;white-space:nowrap;">dist-sw-02</div>
+                </div>
+                <!-- acc-sw-01 -->
+                <div style="position:absolute; left:19.1%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:38px;height:38px;border-radius:50%;background:#161b22;border:1.5px solid #6e7681;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#9fb4c8;">SW</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#6e7681;white-space:nowrap;">acc-sw-01</div>
+                </div>
+                <!-- acc-sw-02 -->
+                <div style="position:absolute; left:50.9%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:38px;height:38px;border-radius:50%;background:#161b22;border:1.5px solid #6e7681;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#9fb4c8;">SW</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#6e7681;white-space:nowrap;">acc-sw-02</div>
+                </div>
+                <!-- acc-sw-03 WARNING -->
+                <div style="position:absolute; left:82.7%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="position:relative;">
+                    <div style="width:38px;height:38px;border-radius:50%;background:#241e0f;border:1.5px solid #f0b429;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#f0c560;">SW</div>
+                    <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#1a1407; background:#f0b429; padding:2px 6px; border-radius:9px; white-space:nowrap;">errs</div>
+                  </div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#8b949e;white-space:nowrap;">acc-sw-03</div>
+                </div>
+
+                <!-- issue callout -->
+                <div style="position:absolute; left:64%; top:4%; width:210px; background:#1a0f12; border:1px solid #ff5c69; border-radius:9px; padding:10px 12px; box-shadow:0 8px 24px -8px rgba(0,0,0,0.6);">
+                  <div style="font:600 11px 'IBM Plex Sans',sans-serif; color:#ff8a93; margin-bottom:4px;">eBGP session down</div>
+                  <div style="font:400 11px/1.45 'IBM Plex Mono',monospace; color:#c9d1d9;">peer 203.0.113.1 (AS65010)<br/>state Idle &middot; 12 flaps / 2h</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- agent task board -->
+            <div style="height:312px; flex:none; background:#11161e; border:1px solid #232a35; border-radius:11px; display:flex; flex-direction:column; overflow:hidden;">
+              <div style="height:46px; flex:none; border-bottom:1px solid #232a35; display:flex; align-items:center; gap:10px; padding:0 14px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#56c8ff" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                <span style="font:600 13px 'IBM Plex Sans',sans-serif; color:#e6edf3;">Agents</span>
+                <span style="font:400 11px 'IBM Plex Mono',monospace; color:#6e7681;">A2A mesh</span>
+                <div style="flex:1;"></div>
+                <span style="font:400 11px 'IBM Plex Mono',monospace; color:#8b949e;">9 personas</span>
+                <span style="font:500 11px 'IBM Plex Mono',monospace; color:#56c8ff;">&middot; 4 active</span>
+              </div>
+              <div style="flex:1; padding:12px 14px; display:grid; grid-template-columns:repeat(3,1fr); gap:9px;">
+
+                <!-- card template repeated -->
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,#56c8ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#06121f;">C</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Coordinator</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#56c8ff; background:rgba(86,200,255,0.12); padding:2px 6px; border-radius:10px;">working</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Orchestrating BGP investigation &middot; routing 3 subtasks</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">a2a.route &middot; now</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">E</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Engineering</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#56c8ff; background:rgba(86,200,255,0.12); padding:2px 6px; border-radius:10px;">working</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Diffing core-rtr-02 config vs golden template</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">nornir.config.plan &middot; 4s</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">O</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Operations</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#56c8ff; background:rgba(86,200,255,0.12); padding:2px 6px; border-radius:10px;">working</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Correlating telemetry &middot; 12 BGP flaps / 2h</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">telemetry.query &middot; 9s</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">M</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Memory Steward</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#56c8ff; background:rgba(86,200,255,0.12); padding:2px 6px; border-radius:10px;">working</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Recalling prior incident INC-1187 (similar flap)</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">memory.recall &middot; 12s</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">G</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Graph Steward</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#3fb950; background:rgba(63,185,80,0.12); padding:2px 6px; border-radius:10px;">done</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Resolved 142 topology edges from Neo4j</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">graph.query &middot; 30s</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">D</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Documentation</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#3fb950; background:rgba(63,185,80,0.12); padding:2px 6px; border-radius:10px;">done</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Cited runbook RB-BGP-014 &middot; 3 sources</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">docs.search &middot; 41s</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">S</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Security</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#f0b429; background:rgba(240,180,41,0.12); padding:2px 6px; border-radius:10px;">waiting</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Queued &middot; review ACL exposure on edge-fw-01</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">awaiting approval gate</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">C</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Change</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#f0b429; background:rgba(240,180,41,0.12); padding:2px 6px; border-radius:10px;">waiting</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Drafting CHG-2291 &middot; awaiting validated plan</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">change.create_draft</div>
+                </div>
+
+                <div style="background:#0f141c; border:1px solid #232a35; border-radius:8px; padding:9px 11px;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                    <div style="width:18px;height:18px;border-radius:5px;background:#2a3340;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#9fb4c8;">L</div>
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#e6edf3; flex:1;">Lab</span>
+                    <span style="font:500 9px 'IBM Plex Mono',monospace; color:#6e7681; background:rgba(110,118,129,0.15); padding:2px 6px; border-radius:10px;">idle</span>
+                  </div>
+                  <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#8b949e;">Standby &middot; Containerlab digital twin ready</div>
+                  <div style="font:400 9px 'IBM Plex Mono',monospace; color:#56708a; margin-top:6px;">lab.control</div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ========================= DIRECTION 2 — ENTERPRISE LIGHT ========================= -->
+    <div style="flex:none; width:1360px;">
+      <div style="margin-bottom:14px;">
+        <div style="font:600 11px 'IBM Plex Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:#9a958c;">Direction 2</div>
+        <div style="font:600 17px 'IBM Plex Sans',sans-serif; color:#2b2926; margin-top:3px;">Enterprise Light &mdash; calm &amp; configurable</div>
+        <div style="font:400 13px 'IBM Plex Sans',sans-serif; color:#7a766d; margin-top:2px;">Airy SaaS surface. Panels carry grip + menu chrome and an &ldquo;Add panel&rdquo; toolbar &mdash; the agent or user composes the layout.</div>
+      </div>
+
+      <div style="width:1360px; height:884px; background:#f4f2ee; border:1px solid #e0ddd5; border-radius:12px; overflow:hidden; box-shadow:0 24px 60px -20px rgba(60,55,45,0.22); color:#2b2926; display:flex; flex-direction:column;">
+
+        <!-- top bar -->
+        <div style="height:54px; flex:none; border-bottom:1px solid #e6e3dc; display:flex; align-items:center; padding:0 18px; gap:14px; background:#ffffff;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <div style="width:24px; height:24px; border-radius:7px; background:#4f46e5; display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#fff;">N</div>
+            <span style="font:600 15px 'IBM Plex Sans',sans-serif; color:#2b2926;">NetMesh</span>
+          </div>
+          <div style="width:1px; height:20px; background:#e6e3dc;"></div>
+          <span style="font:500 13px 'IBM Plex Sans',sans-serif; color:#6b675f;">Operations Console</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#4f46e5; background:#eef0fe; border:1px solid #d8dbfb; padding:3px 9px; border-radius:6px;">INC-1192</span>
+          <div style="flex:1;"></div>
+          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#d97706; background:#fdf3e3; border:1px solid #f5e3c3; padding:3px 9px; border-radius:6px;">env: lab</span>
+          <div style="display:flex; align-items:center; gap:8px; padding:4px 5px 4px 11px; border:1px solid #e6e3dc; border-radius:20px; background:#fff;">
+            <span style="font:500 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">j.rivera</span>
+            <span style="font:500 9px 'IBM Plex Mono',monospace; color:#6b675f; background:#f0eee9; padding:2px 5px; border-radius:4px;">OBO</span>
+            <div style="width:24px; height:24px; border-radius:50%; background:#e3e0ff; display:flex; align-items:center; justify-content:center; font:600 11px 'IBM Plex Mono',monospace; color:#4f46e5;">JR</div>
+          </div>
+        </div>
+
+        <!-- body -->
+        <div style="flex:1; display:flex; min-height:0;">
+
+          <!-- chat column -->
+          <div style="width:510px; flex:none; border-right:1px solid #e6e3dc; display:flex; flex-direction:column; min-height:0; background:#ffffff;">
+            <div style="height:58px; flex:none; border-bottom:1px solid #f0eee9; display:flex; align-items:center; gap:11px; padding:0 18px;">
+              <div style="position:relative;">
+                <div style="width:32px; height:32px; border-radius:10px; background:#4f46e5; display:flex; align-items:center; justify-content:center; font:700 13px 'IBM Plex Mono',monospace; color:#fff;">C</div>
+                <div style="position:absolute; right:-2px; bottom:-2px; width:9px; height:9px; border-radius:50%; background:#16a34a; border:2px solid #fff;"></div>
+              </div>
+              <div style="flex:1;">
+                <div style="font:600 14px 'IBM Plex Sans',sans-serif; color:#2b2926;">Coordinator Agent</div>
+                <div style="font:400 11px 'IBM Plex Mono',monospace; color:#9a958c;">orchestrating &middot; 9 personas online</div>
+              </div>
+              <span style="font:500 10px 'IBM Plex Mono',monospace; color:#16a34a; display:flex; align-items:center; gap:5px; background:#eaf7ee; padding:4px 9px; border-radius:14px;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>LIVE</span>
+            </div>
+
+            <!-- messages -->
+            <div style="flex:1; overflow:hidden; padding:20px 18px; display:flex; flex-direction:column; gap:18px; background:#fbfaf8;">
+
+              <!-- user -->
+              <div style="align-self:flex-end; max-width:88%;">
+                <div style="font:500 10px 'IBM Plex Mono',monospace; color:#9a958c; text-align:right; margin-bottom:5px;">You &middot; 14:02</div>
+                <div style="background:#4f46e5; border-radius:14px 14px 4px 14px; padding:12px 14px; font:400 13px/1.5 'IBM Plex Sans',sans-serif; color:#fff;">core-rtr-02 keeps dropping its eBGP session to the upstream provider (AS65010) &mdash; intermittent. Investigate and show me the topology around it.</div>
+              </div>
+
+              <!-- agent -->
+              <div style="display:flex; gap:11px; max-width:100%;">
+                <div style="width:30px; height:30px; flex:none; border-radius:10px; background:#4f46e5; display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#fff;">C</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:7px; flex-wrap:wrap;">
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">Coordinator</span>
+                    <span style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c;">&rarr; Engineering &middot; Operations &middot; Graph Steward</span>
+                  </div>
+                  <div style="background:#fff; border:1px solid #ece9e2; border-radius:4px 14px 14px 14px; padding:13px 14px;">
+                    <div style="font:400 13px/1.55 'IBM Plex Sans',sans-serif; color:#403c35; margin-bottom:13px;">I queried the knowledge graph for the topology around <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#4f46e5;">core-rtr-02</span> and ran read-only checks. The eBGP peer is flapping and I found a related config drift. Findings:</div>
+
+                    <div style="font:600 10px 'IBM Plex Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; color:#9a958c; margin-bottom:9px;">Evidence &middot; 3</div>
+                    <div style="display:flex; flex-direction:column; gap:9px; margin-bottom:14px;">
+
+                      <div style="background:#fbfaf8; border:1px solid #ece9e2; border-left:3px solid #dc2626; border-radius:9px; padding:10px 12px;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:5px;">
+                          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#4f46e5;">nornir.command.run_readonly</span>
+                          <span style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c;">core-rtr-02</span>
+                        </div>
+                        <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#403c35; background:#f4f2ee; border-radius:5px; padding:6px 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">neighbor 203.0.113.1 <span style="color:#dc2626;">Idle</span> (was Established 2h12m)</div>
+                      </div>
+
+                      <div style="background:#fbfaf8; border:1px solid #ece9e2; border-left:3px solid #d97706; border-radius:9px; padding:10px 12px;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:5px;">
+                          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#4f46e5;">nornir.config.plan &middot; diff</span>
+                          <span style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c;">dist-sw-01</span>
+                        </div>
+                        <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#403c35; background:#f4f2ee; border-radius:5px; padding:6px 8px;"><span style="color:#16a34a;">+</span> route-map RM-UPLINK &middot; <span style="color:#d97706;">3 lines drift</span></div>
+                      </div>
+
+                      <div style="background:#fbfaf8; border:1px solid #ece9e2; border-left:3px solid #4f46e5; border-radius:9px; padding:10px 12px;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:5px;">
+                          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#4f46e5;">telemetry.query</span>
+                          <span style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c;">prometheus</span>
+                        </div>
+                        <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#403c35; background:#f4f2ee; border-radius:5px; padding:6px 8px;">bgp_session_flaps = <span style="color:#4f46e5;">12</span> over 2h &middot; peer AS65010</div>
+                      </div>
+                    </div>
+
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:13px;">
+                      <span style="font:500 10px 'IBM Plex Mono',monospace; color:#5a564e; background:#f4f2ee; border:1px solid #e6e3dc; padding:3px 8px; border-radius:14px;">[1] RB-BGP-014</span>
+                      <span style="font:500 10px 'IBM Plex Mono',monospace; color:#5a564e; background:#f4f2ee; border:1px solid #e6e3dc; padding:3px 8px; border-radius:14px;">[2] INC-1187</span>
+                      <span style="font:500 10px 'IBM Plex Mono',monospace; color:#5a564e; background:#f4f2ee; border:1px solid #e6e3dc; padding:3px 8px; border-radius:14px;">[3] Neo4j snapshot 14:01</span>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px; padding-top:12px; border-top:1px solid #f0eee9; flex-wrap:wrap;">
+                      <span style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c;">audit <span style="color:#5a564e;">aud-7f3c91</span></span>
+                      <span style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c;">identity <span style="color:#5a564e;">j.rivera (OBO)</span></span>
+                      <span style="font:500 10px 'IBM Plex Mono',monospace; color:#16a34a;">&#10003; policy: read-only</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- typing -->
+              <div style="display:flex; gap:11px; align-items:center;">
+                <div style="width:30px; height:30px; flex:none; border-radius:10px; background:#ece9e2; display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#6b675f;">E</div>
+                <div style="font:400 12px 'IBM Plex Sans',sans-serif; color:#6b675f; display:flex; align-items:center; gap:7px;">Engineering is drafting a config diff
+                  <span style="display:inline-flex; gap:3px;">
+                    <span style="width:5px;height:5px;border-radius:50%;background:#4f46e5;animation:blink 1.2s infinite;"></span>
+                    <span style="width:5px;height:5px;border-radius:50%;background:#4f46e5;animation:blink 1.2s infinite 0.2s;"></span>
+                    <span style="width:5px;height:5px;border-radius:50%;background:#4f46e5;animation:blink 1.2s infinite 0.4s;"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- composer -->
+            <div style="flex:none; border-top:1px solid #f0eee9; padding:13px 18px; background:#fff;">
+              <div style="display:flex; align-items:center; gap:8px; background:#fbfaf8; border:1px solid #e6e3dc; border-radius:12px; padding:9px 9px 9px 14px;">
+                <span style="font:400 13px 'IBM Plex Sans',sans-serif; color:#9a958c; flex:1;">Message the network agent&hellip;</span>
+                <span style="font:500 10px 'IBM Plex Mono',monospace; color:#6b675f; background:#f0eee9; border:1px solid #e6e3dc; padding:4px 8px; border-radius:6px;">7 tools</span>
+                <div style="width:32px; height:32px; border-radius:9px; background:#4f46e5; display:flex; align-items:center; justify-content:center;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </div>
+              </div>
+              <div style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c; margin-top:8px; text-align:center;">Persona: Coordinator &middot; effective perms = user &cap; persona &cap; tool &cap; target</div>
+            </div>
+          </div>
+
+          <!-- right panel column -->
+          <div style="flex:1; min-width:0; display:flex; flex-direction:column; min-height:0;">
+
+            <!-- panel toolbar (build-your-own) -->
+            <div style="height:46px; flex:none; display:flex; align-items:center; gap:10px; padding:0 18px; border-bottom:1px solid #e6e3dc; background:#faf9f6; position:relative; z-index:20;">
+              <div style="display:flex; align-items:center; gap:7px; cursor:pointer; padding:4px 8px; border-radius:7px; background:#fff; border:1px solid #d8dbfb;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">Engineering Investigation</span>
+                <span style="font:600 9px 'IBM Plex Mono',monospace; color:#9a958c;">&#9652;</span>
+              </div>
+              <span style="font:400 10px 'IBM Plex Mono',monospace; color:#9a958c;">2 panels</span>
+              <div style="flex:1;"></div>
+              <span style="font:500 11px 'IBM Plex Sans',sans-serif; color:#6b675f; border:1px solid #e6e3dc; background:#fff; border-radius:7px; padding:5px 10px;">Layout: Auto</span>
+              <span style="font:500 11px 'IBM Plex Sans',sans-serif; color:#fff; background:#4f46e5; border-radius:7px; padding:6px 12px; display:flex; align-items:center; gap:5px;"><span style="font-size:14px; line-height:1;">+</span> Add panel</span>
+
+              <!-- layout presets popover -->
+              <div style="position:absolute; top:42px; left:14px; width:318px; background:#fff; border:1px solid #e0ddd5; border-radius:12px; box-shadow:0 16px 40px -12px rgba(60,55,45,0.3); overflow:hidden;">
+                <div style="padding:11px 14px 9px; border-bottom:1px solid #f0eee9; display:flex; align-items:center;">
+                  <span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Layout presets</span>
+                  <span style="font:400 9px 'IBM Plex Mono',monospace; color:#9a958c; text-transform:uppercase; letter-spacing:0.06em;">by role / work</span>
+                </div>
+                <div style="padding:7px;">
+                  <!-- active -->
+                  <div style="display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:9px; background:#eef0fe; cursor:pointer;">
+                    <div style="width:44px;height:32px;border:1px solid #c7caf6;border-radius:5px;background:#fff;padding:3px;display:flex;flex-direction:column;gap:2px;flex:none;"><div style="flex:2;background:#aeb4f0;border-radius:2px;"></div><div style="flex:1;background:#aeb4f0;border-radius:2px;"></div></div>
+                    <div style="flex:1;"><div style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">Engineering Investigation</div><div style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f;">Topology + Agent tasks &middot; Eng / on-call</div></div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+                  </div>
+                  <!-- ops -->
+                  <div style="display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:9px; cursor:pointer;">
+                    <div style="width:44px;height:32px;border:1px solid #e6e3dc;border-radius:5px;background:#fff;padding:3px;display:flex;flex-direction:column;gap:2px;flex:none;"><div style="flex:1;display:flex;gap:2px;"><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div></div><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div></div>
+                    <div style="flex:1;"><div style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">Operations Triage</div><div style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f;">Telemetry + Alerts + Agents &middot; NOC</div></div>
+                  </div>
+                  <!-- security -->
+                  <div style="display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:9px; cursor:pointer;">
+                    <div style="width:44px;height:32px;border:1px solid #e6e3dc;border-radius:5px;background:#fff;padding:3px;display:flex;flex-direction:row;gap:2px;flex:none;"><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div></div></div>
+                    <div style="flex:1;"><div style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">Security Review</div><div style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f;">Exposure + Findings + Audit &middot; SecOps</div></div>
+                  </div>
+                  <!-- docs -->
+                  <div style="display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:9px; cursor:pointer;">
+                    <div style="width:44px;height:32px;border:1px solid #e6e3dc;border-radius:5px;background:#fff;padding:3px;display:flex;flex-direction:column;gap:2px;flex:none;"><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div></div>
+                    <div style="flex:1;"><div style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">Documentation</div><div style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f;">Sources + Citations + Graph &middot; Docs</div></div>
+                  </div>
+                  <!-- noc -->
+                  <div style="display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:9px; cursor:pointer;">
+                    <div style="width:44px;height:32px;border:1px solid #e6e3dc;border-radius:5px;background:#fff;padding:3px;display:flex;flex-direction:column;gap:2px;flex:none;"><div style="flex:1;background:#d4d0c6;border-radius:2px;"></div></div>
+                    <div style="flex:1;"><div style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926;">NOC Overview</div><div style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f;">Full topology wall &middot; Command center</div></div>
+                  </div>
+                </div>
+                <div style="border-top:1px solid #f0eee9; padding:7px;">
+                  <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; cursor:pointer; color:#4f46e5;">
+                    <span style="font-size:14px; line-height:1;">+</span><span style="font:600 11px 'IBM Plex Sans',sans-serif;">Save current layout as preset</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="flex:1; min-height:0; padding:18px; display:flex; flex-direction:column; gap:16px;">
+
+              <!-- topology panel -->
+              <div style="flex:1; min-height:0; background:#ffffff; border:1px solid #e6e3dc; border-radius:14px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 1px 3px rgba(60,55,45,0.05);">
+                <div style="height:48px; flex:none; border-bottom:1px solid #f0eee9; display:flex; align-items:center; gap:10px; padding:0 16px;">
+                  <span style="color:#c9c5bc; font:600 14px 'IBM Plex Mono',monospace; letter-spacing:-1px; cursor:grab;">&#8942;&#8942;</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><circle cx="5" cy="6" r="3"/><circle cx="19" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M7.5 7.5 11 16M16.5 7.5 13 16"/></svg>
+                  <span style="font:600 13px 'IBM Plex Sans',sans-serif; color:#2b2926;">Topology</span>
+                  <span style="font:400 11px 'IBM Plex Mono',monospace; color:#9a958c;">core-rtr-02 neighborhood</span>
+                  <span style="font:500 10px 'IBM Plex Mono',monospace; color:#7c3aed; background:#f3edfd; border:1px solid #e4d7fb; padding:2px 7px; border-radius:5px;">Neo4j</span>
+                  <div style="flex:1;"></div>
+                  <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#dc2626;"></span>critical</span>
+                  <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#d97706;"></span>warning</span>
+                  <span style="font:400 10px 'IBM Plex Mono',monospace; color:#6b675f; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#7c3aed;"></span>proposed</span>
+                  <span style="color:#c9c5bc; font:600 16px 'IBM Plex Sans',sans-serif; margin-left:4px;">&#8943;</span>
+                </div>
+
+                <div style="flex:1; position:relative; background:#fbfaf8; background-image:radial-gradient(#eae6dd 1px, transparent 1px); background-size:22px 22px;">
+                  <svg style="position:absolute; inset:0; width:100%; height:100%;" viewBox="0 0 786 392" preserveAspectRatio="xMidYMid meet">
+                    <line x1="95" y1="95" x2="300" y2="80" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="300" y1="80" x2="490" y2="80" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="490" y1="80" x2="690" y2="95" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="300" y1="80" x2="245" y2="220" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="300" y1="80" x2="545" y2="220" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="490" y1="80" x2="245" y2="220" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="490" y1="80" x2="545" y2="220" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="245" y1="220" x2="150" y2="330" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="245" y1="220" x2="400" y2="330" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="545" y1="220" x2="400" y2="330" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="545" y1="220" x2="650" y2="330" stroke="#d8d4ca" stroke-width="1.6"/>
+                    <line x1="95" y1="95" x2="490" y2="80" stroke="#dc2626" stroke-width="2" stroke-dasharray="7 5" style="animation:dashFlow 1s linear infinite;"/>
+                  </svg>
+
+                  <div style="position:absolute; left:12.1%; top:24.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#fff;border:1.5px solid #b8b3a8;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#6b675f;box-shadow:0 1px 3px rgba(60,55,45,0.1);">WAN</div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#6b675f;white-space:nowrap;">wan-edge-01</div>
+                  </div>
+                  <div style="position:absolute; left:38.2%; top:20.4%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#eef0fe;border:1.5px solid #4f46e5;display:flex;align-items:center;justify-content:center;font:600 13px 'IBM Plex Mono',monospace;color:#4f46e5;box-shadow:0 1px 3px rgba(60,55,45,0.1);">R</div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#6b675f;white-space:nowrap;">core-rtr-01</div>
+                  </div>
+                  <div style="position:absolute; left:62.3%; top:20.4%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px; z-index:3;">
+                    <div style="position:relative;">
+                      <div style="width:46px;height:46px;border-radius:50%;background:#fde9ea;border:2px solid #dc2626;display:flex;align-items:center;justify-content:center;font:600 13px 'IBM Plex Mono',monospace;color:#dc2626;animation:pulseCrit 1.8s infinite;">R</div>
+                      <div style="position:absolute; top:-9px; right:-12px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#dc2626; padding:2px 6px; border-radius:9px; white-space:nowrap;">BGP Idle</div>
+                    </div>
+                    <div style="font:600 11px 'IBM Plex Mono',monospace;color:#dc2626;white-space:nowrap;">core-rtr-02</div>
+                  </div>
+                  <div style="position:absolute; left:87.8%; top:24.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="position:relative;">
+                      <div style="width:42px;height:42px;border-radius:50%;background:#f3edfd;border:1.5px dashed #7c3aed;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#7c3aed;">FW</div>
+                      <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#7c3aed; padding:2px 6px; border-radius:9px; white-space:nowrap;">+ACL</div>
+                    </div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#6b675f;white-space:nowrap;">edge-fw-01</div>
+                  </div>
+                  <div style="position:absolute; left:31.2%; top:56.1%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="position:relative;">
+                      <div style="width:42px;height:42px;border-radius:50%;background:#fdf3e3;border:1.5px solid #d97706;display:flex;align-items:center;justify-content:center;font:600 12px 'IBM Plex Mono',monospace;color:#d97706;">SW</div>
+                      <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#d97706; padding:2px 6px; border-radius:9px; white-space:nowrap;">drift</div>
+                    </div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#6b675f;white-space:nowrap;">dist-sw-01</div>
+                  </div>
+                  <div style="position:absolute; left:69.3%; top:56.1%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#eef0fe;border:1.5px solid #4f46e5;display:flex;align-items:center;justify-content:center;font:600 12px 'IBM Plex Mono',monospace;color:#4f46e5;box-shadow:0 1px 3px rgba(60,55,45,0.1);">SW</div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#6b675f;white-space:nowrap;">dist-sw-02</div>
+                  </div>
+                  <div style="position:absolute; left:19.1%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="width:38px;height:38px;border-radius:50%;background:#fff;border:1.5px solid #cdc8bd;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#8a857b;">SW</div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#9a958c;white-space:nowrap;">acc-sw-01</div>
+                  </div>
+                  <div style="position:absolute; left:50.9%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="width:38px;height:38px;border-radius:50%;background:#fff;border:1.5px solid #cdc8bd;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#8a857b;">SW</div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#9a958c;white-space:nowrap;">acc-sw-02</div>
+                  </div>
+                  <div style="position:absolute; left:82.7%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                    <div style="position:relative;">
+                      <div style="width:38px;height:38px;border-radius:50%;background:#fdf3e3;border:1.5px solid #d97706;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#d97706;">SW</div>
+                      <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#d97706; padding:2px 6px; border-radius:9px; white-space:nowrap;">errs</div>
+                    </div>
+                    <div style="font:500 11px 'IBM Plex Mono',monospace;color:#9a958c;white-space:nowrap;">acc-sw-03</div>
+                  </div>
+
+                  <div style="position:absolute; left:64%; top:4%; width:210px; background:#fff; border:1px solid #f3c0c2; border-radius:10px; padding:11px 13px; box-shadow:0 8px 24px -8px rgba(60,55,45,0.2);">
+                    <div style="font:600 11px 'IBM Plex Sans',sans-serif; color:#dc2626; margin-bottom:4px;">eBGP session down</div>
+                    <div style="font:400 11px/1.45 'IBM Plex Mono',monospace; color:#5a564e;">peer 203.0.113.1 (AS65010)<br/>state Idle &middot; 12 flaps / 2h</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- agent task board -->
+              <div style="height:300px; flex:none; background:#ffffff; border:1px solid #e6e3dc; border-radius:14px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 1px 3px rgba(60,55,45,0.05);">
+                <div style="height:48px; flex:none; border-bottom:1px solid #f0eee9; display:flex; align-items:center; gap:10px; padding:0 16px;">
+                  <span style="color:#c9c5bc; font:600 14px 'IBM Plex Mono',monospace; letter-spacing:-1px; cursor:grab;">&#8942;&#8942;</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                  <span style="font:600 13px 'IBM Plex Sans',sans-serif; color:#2b2926;">Agents</span>
+                  <span style="font:400 11px 'IBM Plex Mono',monospace; color:#9a958c;">A2A mesh</span>
+                  <div style="flex:1;"></div>
+                  <span style="font:400 11px 'IBM Plex Mono',monospace; color:#6b675f;">9 personas</span>
+                  <span style="font:500 11px 'IBM Plex Mono',monospace; color:#4f46e5;">&middot; 4 active</span>
+                  <span style="color:#c9c5bc; font:600 16px 'IBM Plex Sans',sans-serif; margin-left:4px;">&#8943;</span>
+                </div>
+                <div style="flex:1; padding:12px 16px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#4f46e5;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#fff;">C</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Coordinator</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#4f46e5; background:#eef0fe; padding:2px 7px; border-radius:10px;">working</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Orchestrating BGP investigation &middot; routing 3 subtasks</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">a2a.route &middot; now</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">E</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Engineering</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#4f46e5; background:#eef0fe; padding:2px 7px; border-radius:10px;">working</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Diffing core-rtr-02 config vs golden template</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">nornir.config.plan &middot; 4s</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">O</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Operations</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#4f46e5; background:#eef0fe; padding:2px 7px; border-radius:10px;">working</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Correlating telemetry &middot; 12 BGP flaps / 2h</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">telemetry.query &middot; 9s</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">M</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Memory Steward</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#4f46e5; background:#eef0fe; padding:2px 7px; border-radius:10px;">working</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Recalling prior incident INC-1187 (similar flap)</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">memory.recall &middot; 12s</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">G</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Graph Steward</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#16a34a; background:#eaf7ee; padding:2px 7px; border-radius:10px;">done</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Resolved 142 topology edges from Neo4j</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">graph.query &middot; 30s</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">D</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Documentation</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#16a34a; background:#eaf7ee; padding:2px 7px; border-radius:10px;">done</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Cited runbook RB-BGP-014 &middot; 3 sources</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">docs.search &middot; 41s</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">S</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Security</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#d97706; background:#fdf3e3; padding:2px 7px; border-radius:10px;">waiting</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Queued &middot; review ACL exposure on edge-fw-01</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">awaiting approval gate</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">C</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Change</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#d97706; background:#fdf3e3; padding:2px 7px; border-radius:10px;">waiting</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Drafting CHG-2291 &middot; awaiting validated plan</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">change.create_draft</div>
+                  </div>
+                  <div style="background:#fbfaf8; border:1px solid #ece9e2; border-radius:10px; padding:10px 12px;">
+                    <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px;">
+                      <div style="width:18px;height:18px;border-radius:6px;background:#e3e0d8;display:flex;align-items:center;justify-content:center;font:700 9px 'IBM Plex Mono',monospace;color:#6b675f;">L</div>
+                      <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#2b2926; flex:1;">Lab</span>
+                      <span style="font:500 9px 'IBM Plex Mono',monospace; color:#8a857b; background:#f0eee9; padding:2px 7px; border-radius:10px;">idle</span>
+                    </div>
+                    <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif; color:#6b675f;">Standby &middot; Containerlab digital twin ready</div>
+                    <div style="font:400 9px 'IBM Plex Mono',monospace; color:#b0aba0; margin-top:6px;">lab.control</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ========================= DIRECTION 3 — AGENT CANVAS ========================= -->
+    <div style="flex:none; width:1360px;">
+      <div style="margin-bottom:14px;">
+        <div style="font:600 11px 'IBM Plex Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:#9a958c;">Direction 3</div>
+        <div style="font:600 17px 'IBM Plex Sans',sans-serif; color:#2b2926; margin-top:3px;">Agent Canvas &mdash; build-your-own panel grid</div>
+        <div style="font:400 13px 'IBM Plex Sans',sans-serif; color:#7a766d; margin-top:2px;">Grafana-style dotted canvas. A panel-type rail + resize grips; the agent drops panels onto the board and you rearrange them.</div>
+      </div>
+
+      <div style="width:1360px; height:884px; background:#16140f; border:1px solid #312d24; border-radius:12px; overflow:hidden; box-shadow:0 24px 60px -20px rgba(0,0,0,0.45); color:#f0ece2; display:flex; flex-direction:column;">
+
+        <!-- top bar -->
+        <div style="height:52px; flex:none; border-bottom:1px solid #312d24; display:flex; align-items:center; padding:0 16px; gap:14px; background:#1b180f;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <div style="width:22px; height:22px; border-radius:6px; background:linear-gradient(135deg,#f5a623,#e0820a); display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#1b1305;">N</div>
+            <span style="font:600 14px 'IBM Plex Sans',sans-serif; color:#f0ece2;">NetMesh</span>
+          </div>
+          <div style="width:1px; height:20px; background:#312d24;"></div>
+          <span style="font:500 13px 'IBM Plex Sans',sans-serif; color:#a8a294;">BGP Investigation</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#f5a623; background:rgba(245,166,35,0.1); border:1px solid rgba(245,166,35,0.25); padding:2px 8px; border-radius:5px;">board: live</span>
+          <div style="flex:1;"></div>
+          <span style="font:500 11px 'IBM Plex Mono',monospace; color:#a8a294; border:1px solid #312d24; padding:4px 10px; border-radius:6px;">Edit layout</span>
+          <div style="display:flex; align-items:center; gap:8px; padding:3px 4px 3px 10px; border:1px solid #312d24; border-radius:20px;">
+            <span style="font:500 12px 'IBM Plex Sans',sans-serif; color:#d8d2c4;">j.rivera</span>
+            <span style="font:500 9px 'IBM Plex Mono',monospace; color:#74705f; background:#262219; padding:2px 5px; border-radius:4px;">OBO</span>
+            <div style="width:24px; height:24px; border-radius:50%; background:#3a3424; display:flex; align-items:center; justify-content:center; font:600 11px 'IBM Plex Mono',monospace; color:#cdbd92;">JR</div>
+          </div>
+        </div>
+
+        <!-- body -->
+        <div style="flex:1; display:flex; min-height:0;">
+
+          <!-- chat column -->
+          <div style="width:480px; flex:none; border-right:1px solid #312d24; display:flex; flex-direction:column; min-height:0; background:#16140f;">
+            <div style="height:54px; flex:none; border-bottom:1px solid #312d24; display:flex; align-items:center; gap:11px; padding:0 16px;">
+              <div style="position:relative;">
+                <div style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#f5a623,#e0820a); display:flex; align-items:center; justify-content:center; font:700 13px 'IBM Plex Mono',monospace; color:#1b1305;">C</div>
+                <div style="position:absolute; right:-2px; bottom:-2px; width:9px; height:9px; border-radius:50%; background:#6ec97a; border:2px solid #16140f;"></div>
+              </div>
+              <div style="flex:1;">
+                <div style="font:600 13px 'IBM Plex Sans',sans-serif; color:#f0ece2;">Coordinator Agent</div>
+                <div style="font:400 11px 'IBM Plex Mono',monospace; color:#74705f;">building your board &middot; 9 personas</div>
+              </div>
+              <span style="font:500 10px 'IBM Plex Mono',monospace; color:#6ec97a; display:flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:#6ec97a;display:inline-block;"></span>LIVE</span>
+            </div>
+
+            <div style="flex:1; overflow:hidden; padding:18px 16px; display:flex; flex-direction:column; gap:15px;">
+
+              <div style="align-self:flex-end; max-width:88%;">
+                <div style="font:500 10px 'IBM Plex Mono',monospace; color:#74705f; text-align:right; margin-bottom:5px;">You &middot; 14:02</div>
+                <div style="background:#262219; border:1px solid #3a3424; border-radius:12px 12px 4px 12px; padding:11px 13px; font:400 13px/1.5 'IBM Plex Sans',sans-serif; color:#e3ddcf;">core-rtr-02 keeps dropping its eBGP session to AS65010. Investigate, and put the topology + agent status on a board for me.</div>
+              </div>
+
+              <div style="display:flex; gap:10px; max-width:100%;">
+                <div style="width:28px; height:28px; flex:none; border-radius:8px; background:linear-gradient(135deg,#f5a623,#e0820a); display:flex; align-items:center; justify-content:center; font:700 12px 'IBM Plex Mono',monospace; color:#1b1305;">C</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:6px; flex-wrap:wrap;">
+                    <span style="font:600 12px 'IBM Plex Sans',sans-serif; color:#f0ece2;">Coordinator</span>
+                    <span style="font:400 10px 'IBM Plex Mono',monospace; color:#74705f;">&rarr; Engineering &middot; Operations &middot; Graph</span>
+                  </div>
+
+                  <!-- board-built notice -->
+                  <div style="background:rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.28); border-radius:9px; padding:10px 12px; margin-bottom:11px; display:flex; gap:9px; align-items:flex-start;">
+                    <span style="color:#f5a623; font-size:13px; line-height:1.3;">&#10022;</span>
+                    <div style="font:400 12px/1.45 'IBM Plex Sans',sans-serif; color:#e3ddcf;">Added <span style="color:#f5a623; font-weight:600;">Topology</span> and <span style="color:#f5a623; font-weight:600;">Agent Tasks</span> panels to your board. Drag to rearrange, or ask me to add telemetry.</div>
+                  </div>
+
+                  <div style="font:400 13px/1.55 'IBM Plex Sans',sans-serif; color:#cfc8ba; margin-bottom:12px;">The eBGP peer is flapping and there&rsquo;s a related config drift on dist-sw-01. Evidence:</div>
+
+                  <div style="font:600 10px 'IBM Plex Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; color:#74705f; margin-bottom:8px;">Evidence &middot; 3</div>
+                  <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:13px;">
+                    <div style="background:#1c1a13; border:1px solid #312d24; border-left:3px solid #ff6b6b; border-radius:8px; padding:10px 12px;">
+                      <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
+                        <span style="font:500 11px 'IBM Plex Mono',monospace; color:#f5a623;">nornir.command.run_readonly</span>
+                        <span style="font:400 10px 'IBM Plex Mono',monospace; color:#74705f;">core-rtr-02</span>
+                      </div>
+                      <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#d8d2c4; background:#100e09; border-radius:5px; padding:6px 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">neighbor 203.0.113.1 <span style="color:#ff6b6b;">Idle</span> (was Established 2h12m)</div>
+                    </div>
+                    <div style="background:#1c1a13; border:1px solid #312d24; border-left:3px solid #f5a623; border-radius:8px; padding:10px 12px;">
+                      <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
+                        <span style="font:500 11px 'IBM Plex Mono',monospace; color:#f5a623;">nornir.config.plan &middot; diff</span>
+                        <span style="font:400 10px 'IBM Plex Mono',monospace; color:#74705f;">dist-sw-01</span>
+                      </div>
+                      <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#d8d2c4; background:#100e09; border-radius:5px; padding:6px 8px;"><span style="color:#6ec97a;">+</span> route-map RM-UPLINK &middot; <span style="color:#f5a623;">3 lines drift</span></div>
+                    </div>
+                    <div style="background:#1c1a13; border:1px solid #312d24; border-left:3px solid #5ec8e6; border-radius:8px; padding:10px 12px;">
+                      <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
+                        <span style="font:500 11px 'IBM Plex Mono',monospace; color:#f5a623;">telemetry.query</span>
+                        <span style="font:400 10px 'IBM Plex Mono',monospace; color:#74705f;">prometheus</span>
+                      </div>
+                      <div style="font:400 11px/1.4 'IBM Plex Mono',monospace; color:#d8d2c4; background:#100e09; border-radius:5px; padding:6px 8px;">bgp_session_flaps = <span style="color:#5ec8e6;">12</span> over 2h &middot; peer AS65010</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#bdb6a6; background:#1f1c14; border:1px solid #312d24; padding:3px 8px; border-radius:14px;">[1] RB-BGP-014</span>
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#bdb6a6; background:#1f1c14; border:1px solid #312d24; padding:3px 8px; border-radius:14px;">[2] INC-1187</span>
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#bdb6a6; background:#1f1c14; border:1px solid #312d24; padding:3px 8px; border-radius:14px;">[3] Neo4j snapshot 14:01</span>
+                  </div>
+
+                  <div style="display:flex; align-items:center; gap:10px; padding-top:11px; border-top:1px solid #312d24; flex-wrap:wrap;">
+                    <span style="font:400 10px 'IBM Plex Mono',monospace; color:#74705f;">audit <span style="color:#bdb6a6;">aud-7f3c91</span></span>
+                    <span style="font:400 10px 'IBM Plex Mono',monospace; color:#74705f;">identity <span style="color:#bdb6a6;">j.rivera (OBO)</span></span>
+                    <span style="font:500 10px 'IBM Plex Mono',monospace; color:#6ec97a;">&#10003; read-only</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="flex:none; border-top:1px solid #312d24; padding:12px 16px;">
+              <div style="display:flex; align-items:center; gap:8px; background:#1c1a13; border:1px solid #3a3424; border-radius:11px; padding:8px 8px 8px 13px;">
+                <span style="font:400 13px 'IBM Plex Sans',sans-serif; color:#74705f; flex:1;">Ask the agent to build a panel&hellip;</span>
+                <span style="font:500 10px 'IBM Plex Mono',monospace; color:#a8a294; background:#262219; border:1px solid #3a3424; padding:4px 8px; border-radius:6px;">7 tools</span>
+                <div style="width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg,#f5a623,#e0820a); display:flex; align-items:center; justify-content:center;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b1305" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- panel-type rail -->
+          <div style="width:54px; flex:none; border-right:1px solid #312d24; background:#1b180f; display:flex; flex-direction:column; align-items:center; padding:12px 0; gap:8px;">
+            <div style="width:36px; height:36px; border-radius:9px; background:rgba(245,166,35,0.14); border:1px solid rgba(245,166,35,0.35); display:flex; align-items:center; justify-content:center;" title="Topology">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7 11 16M17 7 13 16"/></svg>
+            </div>
+            <div style="width:36px; height:36px; border-radius:9px; background:rgba(245,166,35,0.14); border:1px solid rgba(245,166,35,0.35); display:flex; align-items:center; justify-content:center;" title="Agent Tasks">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
+            <div style="width:36px; height:36px; border-radius:9px; border:1px solid #312d24; display:flex; align-items:center; justify-content:center;" title="Telemetry">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#74705f" stroke-width="2"><path d="M3 18 9 11l4 4 8-9"/></svg>
+            </div>
+            <div style="width:36px; height:36px; border-radius:9px; border:1px solid #312d24; display:flex; align-items:center; justify-content:center;" title="Logs">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#74705f" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            </div>
+            <div style="width:36px; height:36px; border-radius:9px; border:1px solid #312d24; display:flex; align-items:center; justify-content:center;" title="Evidence">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#74705f" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/></svg>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="width:36px; height:36px; border-radius:9px; border:1px dashed #4a4636; display:flex; align-items:center; justify-content:center; color:#74705f; font-size:18px;" title="Add panel">+</div>
+          </div>
+
+          <!-- canvas -->
+          <div style="flex:1; min-width:0; background:#14120c; background-image:radial-gradient(#262217 1.3px, transparent 1.3px); background-size:20px 20px; padding:16px; display:flex; flex-direction:column; gap:16px;">
+
+            <!-- topology panel tile -->
+            <div style="flex:1; min-height:0; position:relative; background:#1b1810; border:1px solid #322e25; border-radius:10px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 6px 18px -10px rgba(0,0,0,0.5);">
+              <div style="height:44px; flex:none; border-bottom:1px solid #2a2719; display:flex; align-items:center; gap:9px; padding:0 14px;">
+                <span style="color:#4a4636; font:600 13px 'IBM Plex Mono',monospace; letter-spacing:-1px; cursor:grab;">&#8942;&#8942;</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7 11 16M17 7 13 16"/></svg>
+                <span style="font:600 13px 'IBM Plex Sans',sans-serif; color:#f0ece2;">Topology</span>
+                <span style="font:400 11px 'IBM Plex Mono',monospace; color:#74705f;">core-rtr-02 neighborhood</span>
+                <span style="font:500 10px 'IBM Plex Mono',monospace; color:#c89bf5; background:rgba(200,155,245,0.1); border:1px solid rgba(200,155,245,0.25); padding:2px 7px; border-radius:5px;">Neo4j</span>
+                <div style="flex:1;"></div>
+                <span style="font:400 10px 'IBM Plex Mono',monospace; color:#a8a294; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#ff6b6b;"></span>critical</span>
+                <span style="font:400 10px 'IBM Plex Mono',monospace; color:#a8a294; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#f5a623;"></span>warning</span>
+                <span style="font:400 10px 'IBM Plex Mono',monospace; color:#a8a294; display:flex; align-items:center; gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#c89bf5;"></span>proposed</span>
+              </div>
+
+              <div style="flex:1; position:relative;">
+                <svg style="position:absolute; inset:0; width:100%; height:100%;" viewBox="0 0 786 392" preserveAspectRatio="xMidYMid meet">
+                  <line x1="95" y1="95" x2="300" y2="80" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="300" y1="80" x2="490" y2="80" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="490" y1="80" x2="690" y2="95" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="300" y1="80" x2="245" y2="220" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="300" y1="80" x2="545" y2="220" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="490" y1="80" x2="245" y2="220" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="490" y1="80" x2="545" y2="220" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="245" y1="220" x2="150" y2="330" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="245" y1="220" x2="400" y2="330" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="545" y1="220" x2="400" y2="330" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="545" y1="220" x2="650" y2="330" stroke="#3a362a" stroke-width="1.6"/>
+                  <line x1="95" y1="95" x2="490" y2="80" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="7 5" style="animation:dashFlow 1s linear infinite;"/>
+                </svg>
+
+                <div style="position:absolute; left:12.1%; top:24.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:42px;height:42px;border-radius:50%;background:#252115;border:1.5px solid #74705f;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#bdb6a6;">WAN</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#a8a294;white-space:nowrap;">wan-edge-01</div>
+                </div>
+                <div style="position:absolute; left:38.2%; top:20.4%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:42px;height:42px;border-radius:50%;background:#2a2208;border:1.5px solid #f5a623;display:flex;align-items:center;justify-content:center;font:600 13px 'IBM Plex Mono',monospace;color:#f5a623;">R</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#a8a294;white-space:nowrap;">core-rtr-01</div>
+                </div>
+                <div style="position:absolute; left:62.3%; top:20.4%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px; z-index:3;">
+                  <div style="position:relative;">
+                    <div style="width:46px;height:46px;border-radius:50%;background:#2a1010;border:2px solid #ff6b6b;display:flex;align-items:center;justify-content:center;font:600 13px 'IBM Plex Mono',monospace;color:#ff9d9d;animation:pulseCrit 1.8s infinite;">R</div>
+                    <div style="position:absolute; top:-9px; right:-12px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#ff6b6b; padding:2px 6px; border-radius:9px; white-space:nowrap;">BGP Idle</div>
+                  </div>
+                  <div style="font:600 11px 'IBM Plex Mono',monospace;color:#ff9d9d;white-space:nowrap;">core-rtr-02</div>
+                </div>
+                <div style="position:absolute; left:87.8%; top:24.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="position:relative;">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#1f1828;border:1.5px dashed #c89bf5;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#d6b8fa;">FW</div>
+                    <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#fff; background:#c89bf5; padding:2px 6px; border-radius:9px; white-space:nowrap;">+ACL</div>
+                  </div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#a8a294;white-space:nowrap;">edge-fw-01</div>
+                </div>
+                <div style="position:absolute; left:31.2%; top:56.1%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="position:relative;">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#2a2208;border:1.5px solid #f5a623;display:flex;align-items:center;justify-content:center;font:600 12px 'IBM Plex Mono',monospace;color:#f5a623;">SW</div>
+                    <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#1b1305; background:#f5a623; padding:2px 6px; border-radius:9px; white-space:nowrap;">drift</div>
+                  </div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#a8a294;white-space:nowrap;">dist-sw-01</div>
+                </div>
+                <div style="position:absolute; left:69.3%; top:56.1%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:42px;height:42px;border-radius:50%;background:#252115;border:1.5px solid #74705f;display:flex;align-items:center;justify-content:center;font:600 12px 'IBM Plex Mono',monospace;color:#bdb6a6;">SW</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#a8a294;white-space:nowrap;">dist-sw-02</div>
+                </div>
+                <div style="position:absolute; left:19.1%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:38px;height:38px;border-radius:50%;background:#201d14;border:1.5px solid #5c584a;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#8a857b;">SW</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#74705f;white-space:nowrap;">acc-sw-01</div>
+                </div>
+                <div style="position:absolute; left:50.9%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="width:38px;height:38px;border-radius:50%;background:#201d14;border:1.5px solid #5c584a;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#8a857b;">SW</div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#74705f;white-space:nowrap;">acc-sw-02</div>
+                </div>
+                <div style="position:absolute; left:82.7%; top:84.2%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:6px; width:90px;">
+                  <div style="position:relative;">
+                    <div style="width:38px;height:38px;border-radius:50%;background:#2a2208;border:1.5px solid #f5a623;display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#f5a623;">SW</div>
+                    <div style="position:absolute; top:-9px; right:-10px; font:600 9px 'IBM Plex Mono',monospace; color:#1b1305; background:#f5a623; padding:2px 6px; border-radius:9px; white-space:nowrap;">errs</div>
+                  </div>
+                  <div style="font:500 11px 'IBM Plex Mono',monospace;color:#a8a294;white-space:nowrap;">acc-sw-03</div>
+                </div>
+
+                <div style="position:absolute; left:64%; top:4%; width:210px; background:#241010; border:1px solid #ff6b6b; border-radius:9px; padding:10px 12px; box-shadow:0 8px 24px -8px rgba(0,0,0,0.6);">
+                  <div style="font:600 11px 'IBM Plex Sans',sans-serif; color:#ff9d9d; margin-bottom:4px;">eBGP session down</div>
+                  <div style="font:400 11px/1.45 'IBM Plex Mono',monospace; color:#d8d2c4;">peer 203.0.113.1 (AS65010)<br/>state Idle &middot; 12 flaps / 2h</div>
+                </div>
+              </div>
+              <div style="position:absolute; right:6px; bottom:6px; width:9px; height:9px; border-right:2px solid #4a4636; border-bottom:2px solid #4a4636;"></div>
+            </div>
+
+            <!-- bottom row: agent tasks + add-panel slot -->
+            <div style="height:290px; flex:none; display:flex; gap:16px;">
+
+              <!-- agent tasks tile -->
+              <div style="flex:1; min-width:0; position:relative; background:#1b1810; border:1px solid #322e25; border-radius:10px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 6px 18px -10px rgba(0,0,0,0.5);">
+                <div style="height:44px; flex:none; border-bottom:1px solid #2a2719; display:flex; align-items:center; gap:9px; padding:0 14px;">
+                  <span style="color:#4a4636; font:600 13px 'IBM Plex Mono',monospace; letter-spacing:-1px; cursor:grab;">&#8942;&#8942;</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                  <span style="font:600 13px 'IBM Plex Sans',sans-serif; color:#f0ece2;">Agent Tasks</span>
+                  <span style="font:400 11px 'IBM Plex Mono',monospace; color:#74705f;">A2A mesh</span>
+                  <div style="flex:1;"></div>
+                  <span style="font:400 11px 'IBM Plex Mono',monospace; color:#a8a294;">9 personas</span>
+                  <span style="font:500 11px 'IBM Plex Mono',monospace; color:#f5a623;">&middot; 4 active</span>
+                </div>
+                <div style="flex:1; padding:11px 12px; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; overflow:hidden;">
+
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#f5a623,#e0820a);display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#1b1305;">C</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Coordinator</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#5ec8e6; background:rgba(94,200,230,0.12); padding:2px 5px; border-radius:9px;">working</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Orchestrating &middot; routing 3 subtasks</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">E</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Engineering</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#5ec8e6; background:rgba(94,200,230,0.12); padding:2px 5px; border-radius:9px;">working</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Diffing core-rtr-02 vs golden</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">O</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Operations</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#5ec8e6; background:rgba(94,200,230,0.12); padding:2px 5px; border-radius:9px;">working</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Correlating telemetry &middot; 12 flaps</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">M</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Memory</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#5ec8e6; background:rgba(94,200,230,0.12); padding:2px 5px; border-radius:9px;">working</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Recalling INC-1187</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">G</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Graph</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#6ec97a; background:rgba(110,201,122,0.12); padding:2px 5px; border-radius:9px;">done</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Resolved 142 edges from Neo4j</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">D</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Docs</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#6ec97a; background:rgba(110,201,122,0.12); padding:2px 5px; border-radius:9px;">done</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Cited RB-BGP-014 &middot; 3 sources</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">S</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Security</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#f5a623; background:rgba(245,166,35,0.12); padding:2px 5px; border-radius:9px;">waiting</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Queued &middot; ACL review on edge-fw-01</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">C</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Change</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#f5a623; background:rgba(245,166,35,0.12); padding:2px 5px; border-radius:9px;">waiting</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Drafting CHG-2291</div>
+                  </div>
+                  <div style="background:#14120c; border:1px solid #2a2719; border-radius:8px; padding:8px 10px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;"><div style="width:16px;height:16px;border-radius:4px;background:#3a3424;display:flex;align-items:center;justify-content:center;font:700 8px 'IBM Plex Mono',monospace;color:#bdb6a6;">L</div><span style="font:600 11px 'IBM Plex Sans',sans-serif; color:#f0ece2; flex:1;">Lab</span><span style="font:500 8px 'IBM Plex Mono',monospace; color:#8a857b; background:rgba(138,133,123,0.15); padding:2px 5px; border-radius:9px;">idle</span></div>
+                    <div style="font:400 10px/1.35 'IBM Plex Sans',sans-serif; color:#a8a294;">Containerlab twin ready</div>
+                  </div>
+
+                </div>
+                <div style="position:absolute; right:6px; bottom:6px; width:9px; height:9px; border-right:2px solid #4a4636; border-bottom:2px solid #4a4636;"></div>
+              </div>
+
+              <!-- add-panel empty slot -->
+              <div style="width:300px; flex:none; border:1.5px dashed #3a362a; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; background:rgba(255,255,255,0.008);">
+                <div style="width:40px; height:40px; border-radius:11px; border:1px solid #3a362a; display:flex; align-items:center; justify-content:center; color:#74705f; font-size:22px;">+</div>
+                <div style="font:600 12px 'IBM Plex Sans',sans-serif; color:#a8a294;">Add a panel</div>
+                <div style="font:400 11px/1.45 'IBM Plex Sans',sans-serif; color:#74705f; text-align:center; max-width:200px;">Drop from the rail, or ask the agent &mdash; &ldquo;add a telemetry panel for AS65010&rdquo;</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--FRAMES-->
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
