@@ -19,11 +19,15 @@ The design position is:
 | Area | Start here | Purpose |
 | --- | --- | --- |
 | Runtime strategy | [ADR-0001: Runtime Strategy](docs/adr/0001-runtime-strategy.md) | OpenShell-first, runtime-adapter-driven decision. |
+| Design principles | [Design Principles and Roadmap](docs/architecture/design-principles.md) | North star, platform principles, and MVP phase plan. |
 | Runtime evaluation | [Runtime Execution Environment Evaluation](docs/architecture/runtime-execution-environment-evaluation.md) | OpenShell, Docker/Podman, Kubernetes, OpenShift, Nomad, E2B, Daytona, Cloudflare, and Modal comparison. |
 | Agent runtime | [OpenShell Nornir Agent Runtime Architecture](docs/architecture/openshell-nornir-agent-runtime.md) | Secure terminal, OpenShell Gateway/Supervisor model, Nornir-first local runtime, Ansible, personas, and skills. |
 | UI and deployment | [UI and Agent Deployment Framework Architecture](docs/architecture/ui-agent-deployment-framework.md) | How UI settings hydrate DB state, render bundles, and hand off deployment artifacts. |
 | UI boundary | [Web UI Deployment Architecture](docs/architecture/web-ui-deployment.md) | Why the UI is a dedicated service, not a process inside the agent sandbox. |
 | Threat model | [Threat Model](docs/architecture/threat-model.md) | Security invariant, assets, trust boundaries, and initial mitigations. |
+| MCP integration | [MCP Integration Model](docs/architecture/mcp-integration.md) | Capability manifests, server lifecycle, broker policy, and audit requirements. |
+| Skills | [Skills for Procedural Knowledge](docs/architecture/skills.md) | Skill package format, lifecycle, validation, and policy binding. |
+| Knowledge graph | [Knowledge Graph and Documentation Ingestion](docs/architecture/knowledge-graph-and-ingestion.md) | Connector pipeline, graph entities, relationships, provenance, and quality gates. |
 | Governance | [Issue-Driven Development Workflow](docs/governance/issue-driven-development.md) | Public issue, PR, review, and merge trail for open source trust. |
 | ADR process | [Architecture Decision Records](docs/adr/README.md) | Long-lived decisions that affect security, runtime, identity, storage, or deployment. |
 | Vocabulary | [Glossary](docs/glossary.md) | Shared terms for contributors and reviewers. |
