@@ -103,6 +103,10 @@ The first capability-focused runtime design is captured in [OpenShell Nornir Age
 
 It defines the secure OpenShell sandbox model, governed terminal access, Nornir-first execution environment, custom script controls, settings database inheritance, Git-backed configuration flow, and the initial capability phases for collection and automation planning.
 
+The UI-to-deployment design is captured in [UI and Agent Deployment Framework Architecture](docs/architecture/ui-agent-deployment-framework.md).
+
+It defines how UI settings hydrate the settings database, render orchestrator and persona bundles, produce OpenShell runtime config, and generate deployment packages for local, Docker, Kubernetes, OpenShift, and customer CI/CD targets.
+
 ## High-Level Architecture
 
 ```mermaid
