@@ -106,6 +106,8 @@ flowchart TB
 | Enterprise appliance stacks | Dell Deskside Agentic AI, HPE Private Cloud AI / AI Factory | Package NVIDIA and private AI infrastructure into enterprise on-prem solutions. | Treat as deployment and go-to-market adjacency, not pure runtime competitors. |
 | Base isolation technology | Kata Containers, Firecracker, gVisor, Docker/Kubernetes sandboxing | Not agent runtimes themselves, but likely substrate choices for building OpenShell-like runtime behavior. | Use as implementation options behind runtime adapters and security profiles. |
 
+Vendor and project capabilities reflect public documentation reviewed on 2026-06-26 and move quickly. Verify current self-hosting, air-gap, private-network, secret-handling, and enterprise-support claims before committing to any non-OpenShell adapter.
+
 ## Category 1: Kubernetes-Native Agent Runtimes
 
 This is the most important competitive category. It maps directly to enterprise deployment reality: customers already run Kubernetes or OpenShift, and they will ask whether the platform can run isolated, stateful agent environments without making OpenShell the only viable option.

@@ -409,15 +409,16 @@ packages/
   effective-config/        # Inheritance and snapshot resolution
   config-renderer/         # Jinja2-style renderer with schema validation
   deployment-planner/      # Deployment plan and diff generation
-  deployment-adapters/     # Compose, Helm, Kustomize, OpenShift, Nomad, CI/CD artifacts
+  deployment-adapters/     # Compose, Helm, Kustomize, OpenShift, and CI/CD artifacts
   runtime-contracts/       # Runtime-neutral bundles, capability declarations, sessions, evidence
   runtime-adapters/        # Launch, terminal, file sync, health, evidence readback
-    openshell/             # Gateway and Supervisor integration
-    local-containers/      # Docker and Podman local mode
-    kubernetes/            # Kubernetes runtime fallback and exec proxy integration
-    openshift/             # OpenShift runtime fallback, SCC, Route, and runtime-class handling
-    nomad/                 # Nomad job lifecycle and Vault/Consul integration
-    hosted-sandboxes/      # E2B, Daytona, Cloudflare, Modal, and future hosted adapters
+    openshell/             # Gateway and Supervisor integration (reference runtime, security baseline)
+    kubernetes/            # Kubernetes-native agent sandbox model (SIG Agent Sandbox-style); primary portability target
+    openshift/             # OpenShift agent sandbox overlays, SCC, Route, and runtime-class handling
+    local-containers/      # Docker and Podman local and lab mode only
+    cloud-sandboxes/       # AWS AgentCore, Google Agent Sandbox, Cloudflare, Vercel (opt-in; declared limits)
+    developer-sandboxes/   # E2B, Daytona, Runloop, CodeSandbox SDK, Microsandbox, Modal
+    appliance/             # Dell, HPE, and other private AI stack deployment channels
   identity-policy/         # User-delegated, agent-owned, hybrid identity rules
   evidence/                # Evidence bundle schema and provenance writers
 

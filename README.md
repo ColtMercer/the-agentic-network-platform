@@ -18,7 +18,7 @@ The design position is:
 
 | Area | Start here | Purpose |
 | --- | --- | --- |
-| Runtime strategy | [ADR-0001: Runtime Strategy](docs/adr/0001-runtime-strategy.md) | OpenShell-first, runtime-adapter-driven decision. |
+| Runtime strategy | [ADR-0001: Runtime Strategy](docs/adr/0001-runtime-strategy.md) | OpenShell-first, Kubernetes-native-capable, runtime-adapter-driven decision. |
 | Design principles | [Design Principles and Roadmap](docs/architecture/design-principles.md) | North star, platform principles, and MVP phase plan. |
 | Runtime evaluation | [Runtime Execution Environment Evaluation](docs/architecture/runtime-execution-environment-evaluation.md) | Competitor landscape covering Kubernetes-native agent runtimes, cloud agent sandboxes, developer sandbox infrastructure, enterprise appliance stacks, and base isolation technology. |
 | Agent runtime | [OpenShell Nornir Agent Runtime Architecture](docs/architecture/openshell-nornir-agent-runtime.md) | Secure terminal, OpenShell Gateway/Supervisor model, Nornir-first local runtime, Ansible, personas, and skills. |
