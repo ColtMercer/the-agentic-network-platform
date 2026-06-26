@@ -181,7 +181,7 @@ Weaknesses:
 
 Product opinion:
 
-This should be the first major portability target after OpenShell. The adapter should not render only a generic pod. It should render an agent sandbox model with stable identity, persistent workspace, audited terminal mediation, explicit network policy, external secret references, model-provider routes, and evidence collection.
+This should be the default architecture target, not merely an OpenShell alternative. The adapter should not render only a generic pod. It should render an agent sandbox model with stable identity, persistent workspace, audited terminal mediation, explicit network policy, external secret references, model-provider routes, and evidence collection.
 
 ## Category 2: Cloud Agent Sandboxes
 
