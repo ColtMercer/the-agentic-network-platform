@@ -338,6 +338,8 @@ Deployment modes:
 | Customer CI/CD handoff | The platform generates artifacts and PRs; the customer controls promotion, scanning, approval, and apply. |
 | Hosted sandbox adapter | Optional future path for code execution or analysis where private network reachability is solved separately. |
 
+When a customer declares a new agent, the enterprise default output is a Git-backed config PR plus a deployment handoff package, not direct mutation of production. The detailed [New Agent Deployment Output Contract](docs/architecture/ui-agent-deployment-framework.md#new-agent-deployment-output-contract) defines the generated config, effective DB state, runtime-neutral agent bundle, target-specific deployment artifacts, customer CI/CD handoff, and provenance record.
+
 ## Capability Plan
 
 The first capabilities should prove trust before write automation:

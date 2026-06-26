@@ -245,6 +245,73 @@ deployment:
   settings_snapshot: stg_123
 ```
 
+## New Agent Deployment Output Contract
+
+When a customer declares a new agent, the platform should not treat "agent created" as "agent is now running in production." The product output is a reviewable deployment intent plus deterministic artifacts that the selected deployment mode can promote.
+
+Enterprise default: the platform opens or updates Git-backed configuration and emits a deployment handoff package for customer CI/CD or GitOps. Direct apply is limited to local and lab modes unless a customer explicitly installs and authorizes an apply-capable adapter.
+
+```mermaid
+flowchart LR
+    request["New agent request"]
+    ui["UI or API"]
+    draft["DB draft and audit event"]
+    configpr["Git config PR"]
+    checks["Schema, policy, render, and security checks"]
+    merge["Merged config revision"]
+    snapshot["Effective settings snapshot"]
+    render["Renderer"]
+    bundle["Runtime-neutral agent bundle"]
+    package["Target-specific deployment package"]
+    handoff["Customer deployment PR or signed artifact"]
+    pipeline["Customer CI/CD or GitOps"]
+    runtime["Kubernetes, OpenShift, OpenShell, or lab runtime"]
+
+    request --> ui
+    ui --> draft
+    ui --> configpr
+    configpr --> checks
+    checks --> merge
+    merge --> snapshot
+    draft --> snapshot
+    snapshot --> render
+    render --> bundle
+    render --> package
+    bundle --> handoff
+    package --> handoff
+    handoff --> pipeline
+    pipeline --> runtime
+```
+
+Required outputs:
+
+| Output | Purpose | Typical contents |
+| --- | --- | --- |
+| Git config change | Durable, reviewable source of intent | Persona definition, prompt source, A2A card, skills, tools, model routes, memory scope, identity mode, secret references, runtime profile, deployment target |
+| DB effective state | Queryable control-plane state | Drafts, imported Git settings, inherited effective settings, sync status, validation results, audit metadata |
+| Runtime-neutral agent bundle | Portable contract between settings and runtimes | Persona bundle, policy bindings, model route refs, secret refs, local tool policy, MCP policy, evidence requirements |
+| Target-specific deployment package | Customer-runtime artifact | Helm values, Kustomize overlay, OpenShift overlay, OpenShell desired state, Compose bundle, CI/CD metadata |
+| Handoff artifact | Enterprise promotion boundary | Deployment repo PR, signed archive, OCI chart/artifact, provenance manifest |
+| Provenance record | Audit and reproducibility | Git SHA, settings snapshot ID, template version, policy revision, image digest, render timestamp, validation result |
+
+Deployment behavior by mode:
+
+| Mode | Default output | Who applies it |
+| --- | --- | --- |
+| Local contributor | Local config plus direct local apply command | Contributor |
+| Lab Compose | Compose bundle and local secret setup instructions | Lab owner |
+| Kubernetes/OpenShift | Helm/Kustomize/OpenShift package or deployment repo PR | Customer CI/CD, GitOps, or platform team |
+| OpenShell reference adapter | OpenShell Gateway desired-state bundle plus surrounding deployment artifacts | Customer pipeline or authorized platform adapter |
+| Enterprise CI/CD | Signed package and/or PR against the customer's deployment repository | Customer pipeline |
+
+The platform should always be able to answer "what changed?" before deployment:
+
+- which persona or orchestrator bundle changed
+- which settings snapshot and Git SHA produced the output
+- which runtime controls are supported, degraded, unsupported, or customer-supplied
+- which secret references are required without exposing secret material
+- which customer pipeline, repo, namespace, or runtime target will receive the handoff
+
 ## Deployment Modes
 
 | Mode | Best for | Platform behavior | Customer behavior |
