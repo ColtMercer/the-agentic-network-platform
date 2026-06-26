@@ -20,7 +20,7 @@ The design position is:
 | --- | --- | --- |
 | Runtime strategy | [ADR-0001: Runtime Strategy](docs/adr/0001-runtime-strategy.md) | OpenShell-first, runtime-adapter-driven decision. |
 | Design principles | [Design Principles and Roadmap](docs/architecture/design-principles.md) | North star, platform principles, and MVP phase plan. |
-| Runtime evaluation | [Runtime Execution Environment Evaluation](docs/architecture/runtime-execution-environment-evaluation.md) | OpenShell, Docker/Podman, Kubernetes, OpenShift, Nomad, E2B, Daytona, Cloudflare, and Modal comparison. |
+| Runtime evaluation | [Runtime Execution Environment Evaluation](docs/architecture/runtime-execution-environment-evaluation.md) | Competitor landscape covering Kubernetes-native agent runtimes, cloud agent sandboxes, developer sandbox infrastructure, enterprise appliance stacks, and base isolation technology. |
 | Agent runtime | [OpenShell Nornir Agent Runtime Architecture](docs/architecture/openshell-nornir-agent-runtime.md) | Secure terminal, OpenShell Gateway/Supervisor model, Nornir-first local runtime, Ansible, personas, and skills. |
 | UI and deployment | [UI and Agent Deployment Framework Architecture](docs/architecture/ui-agent-deployment-framework.md) | How UI settings hydrate DB state, render bundles, and hand off deployment artifacts. |
 | UI boundary | [Web UI Deployment Architecture](docs/architecture/web-ui-deployment.md) | Why the UI is a dedicated service, not a process inside the agent sandbox. |
@@ -160,41 +160,37 @@ Runtime-delivered settings include:
 
 OpenShell is the default reference runtime because it is purpose-built for policy-governed autonomous agent execution. The product contract is still runtime-neutral: the platform renders an agent runtime bundle, then a runtime adapter translates it for the selected environment.
 
+The main competitor pressure is not generic Docker or Kubernetes. It is the emerging class of isolated, stateful agent sandboxes and the enterprise stacks that package them. The detailed analysis lives in the [Runtime Execution Environment Evaluation](docs/architecture/runtime-execution-environment-evaluation.md).
+
 ```mermaid
-flowchart LR
+flowchart TB
     snapshot["Effective settings snapshot"]
     bundle["Runtime-neutral agent bundle"]
-    contracts["Runtime contracts: sessions, secrets, model routes, tools, evidence"]
+    contract["Runtime adapter contract<br/>sessions, secrets, model routes, tools, evidence"]
 
-    subgraph adapters["Runtime adapters"]
-        openshell["OpenShell adapter"]
-        local["Docker or Podman local adapter"]
-        k8s["Kubernetes or OpenShift adapter"]
-        nomad["Nomad adapter"]
-        hosted["Hosted sandbox adapters"]
+    subgraph reference["Reference runtime"]
+        openshell["NVIDIA OpenShell"]
     end
 
-    subgraph runtimes["Execution environments"]
-        openshellrt["NVIDIA OpenShell Gateway and sandboxes"]
-        localrt["Local OCI containers"]
-        clusterrt["Customer Kubernetes or OpenShift"]
-        nomadrt["Customer Nomad cluster"]
-        hostedrt["E2B, Daytona, Cloudflare, Modal, or future sandboxes"]
+    subgraph competitorLandscape["Runtime competitor landscape"]
+        k8sNative["Kubernetes-native agent runtimes<br/>Kubernetes SIG Agent Sandbox, Agyn, Northflank patterns"]
+        cloudSandboxes["Cloud agent sandboxes<br/>AWS AgentCore, Google Agent Sandbox, Cloudflare, Vercel"]
+        devSandboxes["Developer sandbox infrastructure<br/>E2B, Daytona, Runloop, CodeSandbox SDK, Microsandbox, Modal"]
+        appliances["Enterprise appliance stacks<br/>Dell Deskside Agentic AI, HPE Private Cloud AI"]
+        substrates["Base isolation technology<br/>Kata Containers, Firecracker, gVisor, Docker and Kubernetes sandboxing"]
     end
 
     snapshot --> bundle
-    bundle --> contracts
-    contracts --> openshell
-    contracts --> local
-    contracts --> k8s
-    contracts --> nomad
-    contracts --> hosted
-    openshell --> openshellrt
-    local --> localrt
-    k8s --> clusterrt
-    nomad --> nomadrt
-    hosted --> hostedrt
+    bundle --> contract
+    contract --> openshell
+    contract --> k8sNative
+    contract --> cloudSandboxes
+    contract --> devSandboxes
+    contract --> appliances
+    contract --> substrates
 ```
+
+OpenShell remains the recommended first adapter and security baseline. Kubernetes-native agent sandboxes are the first major portability target because they map most closely to enterprise Kubernetes and OpenShift environments. Cloud and developer sandboxes are useful expansion paths, appliance stacks are likely enterprise deployment channels, and base isolation technologies are implementation substrates rather than full platform competitors.
 
 Adapters must declare missing or degraded controls. Portability should be honest: a runtime that cannot enforce terminal audit, model routing, network egress, secret references, or evidence capture is not equivalent to OpenShell.
 
