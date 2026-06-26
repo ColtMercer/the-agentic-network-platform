@@ -4,9 +4,9 @@ Status: draft for review
 Date: 2026-06-26
 Issue: https://github.com/ColtMercer/the-agentic-network-platform/issues/27
 
-This document evaluates the runtime execution market around The Agentic Network Platform. The platform still treats NVIDIA OpenShell as the default reference runtime, but the comparison now focuses on the competitor categories that are closest to secure, stateful, agentic execution.
+This document evaluates the runtime execution market around The Agentic Network Platform. The platform should treat Kubernetes-native agent sandboxes as the default product architecture target and NVIDIA OpenShell as the first reference adapter and security baseline, not as the only default the product understands.
 
-The important market pressure is not "OpenShell versus Docker." Docker, Kubernetes, and VM isolation are substrates. The real question is whether the platform can express personas, tools, identity, secrets, terminal access, evidence, and state in a way that can run on OpenShell by default and still adapt to customers who standardize on Kubernetes-native agent sandboxes, managed cloud sandboxes, developer sandbox platforms, enterprise AI appliances, or lower-level isolation technology.
+The important market pressure is not "OpenShell versus Docker." Docker, Kubernetes, and VM isolation are substrates. The real question is whether the platform can express personas, tools, identity, secrets, terminal access, evidence, and state in a way that fits Kubernetes and OpenShift enterprise environments by default, uses OpenShell where it provides the strongest secure runtime path, and still adapts to managed cloud sandboxes, developer sandbox platforms, enterprise AI appliances, or lower-level isolation technology.
 
 ## Goals
 
@@ -25,16 +25,18 @@ The important market pressure is not "OpenShell versus Docker." Docker, Kubernet
 
 ## Executive Recommendation
 
-Build the product as a Kubernetes-native-capable agent platform with OpenShell as the first reference runtime adapter.
+Shift the platform recommendation one level up: make the product a Kubernetes-native agent-sandbox platform first, with OpenShell as the first reference implementation and security baseline.
 
-That is a deliberate shift in framing. OpenShell is still the preferred starting runtime because it is purpose-built for policy-governed agent execution. But the platform should not sound like it only understands OpenShell, Docker, or generic Kubernetes pods. The strongest competitive pressure comes from Kubernetes-native agent runtimes: Kubernetes SIG Agent Sandbox, Google or GKE Agent Sandbox patterns, Agyn, and Northflank-style sandbox patterns. These are closest to the problem we care about: isolated, stateful, singleton agent environments that can run near enterprise systems and private networks.
+That is a deliberate shift in framing. OpenShell is still a strong first build target because it is purpose-built for policy-governed agent execution. But larger enterprise adoption is more likely to follow Kubernetes and OpenShift operating models than a single new runtime. CNCF reports Kubernetes production use at 82% among container users in the 2025 annual survey, and Kubernetes SIG Agent Sandbox, Google/GKE Agent Sandbox, Agyn, and Northflank-style patterns are converging on the thing we care about: isolated, stateful, singleton agent environments that can run near enterprise systems and private networks.
+
+OpenShell should therefore be treated as the first high-quality adapter and proof of the security model, not the product's permanent default deployment assumption.
 
 Recommended posture:
 
 | Priority | Runtime posture | Why |
 | --- | --- | --- |
-| 1 | OpenShell reference adapter | Best default for policy-governed agent execution, secure terminal mediation, model-provider routing, and sandbox supervision. |
-| 2 | Kubernetes-native agent sandbox compatibility | Most important enterprise portability story for Kubernetes and OpenShift customers. Should model Agent Sandbox, Agyn, and Northflank patterns rather than generic pods. |
+| 1 | Kubernetes-native agent sandbox product architecture | Most important enterprise portability story for Kubernetes and OpenShift customers. Should model Agent Sandbox, Agyn, and Northflank patterns rather than generic pods. |
+| 2 | OpenShell reference adapter | Best first implementation for policy-governed agent execution, secure terminal mediation, model-provider routing, and sandbox supervision. |
 | 3 | Local lab and contributor runtime | Keep Docker or Podman useful for local development, but position it as a lab substrate, not a competitor category. |
 | 4 | Cloud and developer sandbox adapters | Useful for demos, SaaS workflows, elastic code execution, and non-network tasks, but weaker for private network reachability unless customers accept cloud lock-in or BYOC models. |
 | 5 | Appliance and substrate awareness | Dell, HPE, Kata, Firecracker, gVisor, Docker, and Kubernetes sandboxing shape packaging and implementation choices, but they are not the same kind of product as the agent platform. |
@@ -54,7 +56,7 @@ The platform contract should preserve these invariants across every adapter:
 ```mermaid
 flowchart TB
     platform["The Agentic Network Platform"]
-    openshell["Default reference runtime<br/>NVIDIA OpenShell"]
+    openshell["Reference adapter<br/>NVIDIA OpenShell"]
 
     subgraph k8sNative["Kubernetes-native agent runtimes"]
         sig["Kubernetes SIG Agent Sandbox"]
@@ -488,8 +490,8 @@ Scores are relative for this product, from 1 low to 5 high. `Overall fit` is a p
 
 | Category | Kubernetes/OpenShift fit | On-prem/private network fit | Stateful agent lifecycle | Terminal and filesystem workflow | Identity/secrets governance | Lock-in risk | Overall fit |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| OpenShell reference runtime | 4 | 5 | 5 | 5 | 5 | 3 | 5 |
 | Kubernetes-native agent runtimes | 5 | 5 | 5 | 4 | 4 | 2 | 5 |
+| OpenShell reference runtime | 4 | 5 | 5 | 5 | 5 | 3 | 5 |
 | Cloud agent sandboxes | 2 | 2 | 4 | 4 | 3 | 5 | 3 |
 | Developer sandbox infrastructure | 3 | 3 | 4 | 5 | 3 | 4 | 3 |
 | Enterprise appliance stacks | 4 | 5 | 4 | 4 | 4 | 4 | 4 |
@@ -498,8 +500,8 @@ Scores are relative for this product, from 1 low to 5 high. `Overall fit` is a p
 
 Interpretation:
 
-- OpenShell remains the strongest default if its APIs, policy model, and ecosystem are stable enough.
-- Kubernetes-native agent runtimes are the most serious non-OpenShell design influence.
+- Kubernetes-native agent runtimes are the strongest default architecture target because enterprise adoption, Kubernetes/OpenShift operations, and agent-sandbox patterns align.
+- OpenShell remains the strongest first reference adapter if its APIs, policy model, and ecosystem are stable enough.
 - Local Docker or Podman remains essential for contributors, but should not be sold as equivalent security.
 - Cloud and developer sandboxes matter for product experience, elastic execution, and future adapters, but they are weaker starting points for private network automation.
 - Appliance stacks matter because they may become the way enterprises consume NVIDIA/OpenShell-aligned infrastructure.
@@ -509,12 +511,12 @@ Interpretation:
 
 The platform should lead with this message:
 
-"The Agentic Network Platform is a runtime-adapter-driven network AI agent platform. NVIDIA OpenShell is the recommended reference runtime. Kubernetes-native agent sandbox models are the primary portability target. Other cloud, developer, appliance, and substrate options can be supported where their controls are explicit and policy gaps are visible."
+"The Agentic Network Platform is a Kubernetes-native, runtime-adapter-driven network AI agent platform. Kubernetes-native agent sandbox models are the default product architecture target. NVIDIA OpenShell is the first reference adapter and security baseline. Other cloud, developer, appliance, and substrate options can be supported where their controls are explicit and policy gaps are visible."
 
 Practical implications:
 
-- Keep OpenShell as the first high-quality adapter and reference security baseline.
-- Build the runtime contract so Kubernetes-native agent sandbox adapters can exist without redesigning personas, skills, identity, secrets, terminal access, model routes, or evidence.
+- Build the runtime contract around Kubernetes-native agent sandbox semantics: stable identity, persistent workspace, controlled network reachability, session mediation, external secret references, and policy-visible execution.
+- Keep OpenShell as the first high-quality adapter and reference security baseline, especially where customers adopt NVIDIA/OpenShell or appliance-backed private AI stacks.
 - Model local Docker/Podman as contributor and lab mode only.
 - Treat managed cloud sandboxes as opt-in deployment adapters with clear lock-in and reachability warnings.
 - Treat E2B, Daytona, Runloop, CodeSandbox SDK, Microsandbox, and Modal as developer-experience competitors whose useful patterns should be borrowed carefully.
@@ -525,15 +527,16 @@ Practical implications:
 
 - The deployment planner must classify a target runtime by category, not just by provider name.
 - The planner must show missing or degraded controls before deployment.
-- The UI should distinguish `reference runtime`, `Kubernetes-native runtime`, `cloud sandbox`, `developer sandbox`, `appliance stack`, and `local lab mode`.
+- The UI should distinguish `default architecture target`, `reference adapter`, `Kubernetes-native runtime`, `cloud sandbox`, `developer sandbox`, `appliance stack`, and `local lab mode`.
 - Runtime bundles should be rendered from settings without assuming an OpenShell-only schema.
-- The OpenShell adapter should remain the reference implementation for policy and evidence semantics.
 - The Kubernetes-native adapter should model stateful singleton agent sandboxes, persistent workspace, controlled network egress, external secret references, and audited session mediation.
+- The OpenShell adapter should remain the reference implementation for policy and evidence semantics.
 - Cloud and developer sandbox adapters must declare data residency, private network reachability, secret handling, and audit limitations.
 - Runtime substrate choices must be recorded as effective runtime state for audit and deployment review.
 
 ## References
 
+- [CNCF: 2025 Annual Cloud Native Survey announcement](https://www.cncf.io/announcements/2026/01/20/kubernetes-established-as-the-de-facto-operating-system-for-ai-as-production-use-hits-82-in-2025-cncf-annual-cloud-native-survey/)
 - [Kubernetes SIG Agent Sandbox](https://agent-sandbox.sigs.k8s.io/)
 - [Kubernetes SIG Agent Sandbox GitHub repository](https://github.com/kubernetes-sigs/agent-sandbox)
 - [Google Cloud: Agent Sandbox on GKE](https://docs.cloud.google.com/kubernetes-engine/docs/concepts/machine-learning/agent-sandbox)
