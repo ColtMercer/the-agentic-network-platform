@@ -294,16 +294,6 @@ Required outputs:
 | Handoff artifact | Enterprise promotion boundary | Deployment repo PR, signed archive, OCI chart/artifact, provenance manifest |
 | Provenance record | Audit and reproducibility | Git SHA, settings snapshot ID, template version, policy revision, image digest, render timestamp, validation result |
 
-Deployment behavior by mode:
-
-| Mode | Default output | Who applies it |
-| --- | --- | --- |
-| Local contributor | Local config plus direct local apply command | Contributor |
-| Lab Compose | Compose bundle and local secret setup instructions | Lab owner |
-| Kubernetes/OpenShift | Helm/Kustomize/OpenShift package or deployment repo PR | Customer CI/CD, GitOps, or platform team |
-| OpenShell reference adapter | OpenShell Gateway desired-state bundle plus surrounding deployment artifacts | Customer pipeline or authorized platform adapter |
-| Enterprise CI/CD | Signed package and/or PR against the customer's deployment repository | Customer pipeline |
-
 The platform should always be able to answer "what changed?" before deployment:
 
 - which persona or orchestrator bundle changed
@@ -314,13 +304,15 @@ The platform should always be able to answer "what changed?" before deployment:
 
 ## Deployment Modes
 
-| Mode | Best for | Platform behavior | Customer behavior |
+| Mode | Best for | Platform output | Who applies it |
 | --- | --- | --- | --- |
-| Local machine | Contributors, quick tests, single-user experiments | Render local config, run UI/API/DB/Gateway locally, use Docker or Podman sandboxes | Developer runs local commands |
-| Docker or Compose lab | Home lab, demos, workshops | Render Compose bundle with UI, API, DB, Gateway, runtime image, observability defaults | Lab owner runs Compose and configures local secrets |
-| Kubernetes | Shared lab, team environments, production-like runtime | Render Helm values or Kustomize overlays, gateway service, API, UI, DB refs, sandbox namespace | Cluster pipeline applies manifests |
-| OpenShift | Enterprise clusters, route/SCC/network-policy needs | Render OpenShift overlays, Route config, SecurityContextConstraints guidance, namespace-scoped policies | Customer validates with OpenShift governance |
-| Customer CI/CD | Enterprises with established promotion gates | Create PR, signed artifact bundle, OCI chart, or rendered manifest package | Customer pipeline scans, approves, promotes, and applies |
+| Local machine | Contributors, quick tests, single-user experiments | Local config plus direct local apply command for UI, API, DB, Gateway, and Docker or Podman sandboxes | Contributor |
+| Docker or Compose lab | Home lab, demos, workshops | Compose bundle, runtime image references, observability defaults, and local secret setup requirements | Lab owner |
+| Kubernetes | Shared lab, team environments, production-like runtime | Helm values or Kustomize package with gateway service, API, UI, DB refs, sandbox namespace, and optional deployment repo PR | Customer CI/CD, GitOps, or platform team |
+| OpenShift | Enterprise clusters, route/SCC/network-policy needs | OpenShift overlay with Route config, SecurityContextConstraints guidance, namespace-scoped policies, and optional deployment repo PR | Customer CI/CD, GitOps, or OpenShift governance team |
+| Customer CI/CD | Enterprises with established promotion gates | Signed artifact bundle, OCI chart/artifact, rendered manifest package, and/or PR against the customer's deployment repository | Customer pipeline |
+
+OpenShell Gateway desired state is a runtime-adapter output inside the selected mode, not a separate deployment mode. For example, a Kubernetes deployment may include both Kubernetes-native agent sandbox artifacts and OpenShell Gateway desired-state artifacts when that reference adapter is selected.
 
 ## Deployment Artifact Flow
 
